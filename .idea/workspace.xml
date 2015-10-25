@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="59df25e1-8e71-47ea-ad9e-48bdbcf89ac9" name="Default" comment="CameraOp Added&#10;http://ftcforum.usfirst.org/showthread.php?4588-How-to-use-the-camera-as-a-sensor&amp;highlight=camera">
+    <list default="true" id="59df25e1-8e71-47ea-ad9e-48bdbcf89ac9" name="Default" comment="October 24">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="7255Code.iws" />
@@ -1321,7 +1321,13 @@
       <option name="project" value="LOCAL" />
       <updated>1445745673954</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="October 24">
+      <created>1445745791623</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1445745791623</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1371,7 +1377,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="CameraOp Added&#10;http://ftcforum.usfirst.org/showthread.php?4588-How-to-use-the-camera-as-a-sensor&amp;highlight=camera" />
-    <option name="LAST_COMMIT_MESSAGE" value="CameraOp Added&#10;http://ftcforum.usfirst.org/showthread.php?4588-How-to-use-the-camera-as-a-sensor&amp;highlight=camera" />
+    <MESSAGE value="October 24" />
+    <option name="LAST_COMMIT_MESSAGE" value="October 24" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
