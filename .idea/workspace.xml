@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="59df25e1-8e71-47ea-ad9e-48bdbcf89ac9" name="Default" comment="">
+    <list default="true" id="59df25e1-8e71-47ea-ad9e-48bdbcf89ac9" name="Default" comment="CameraOp Added&#10;http://ftcforum.usfirst.org/showthread.php?4588-How-to-use-the-camera-as-a-sensor&amp;highlight=camera">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="7255Code.iws" />
@@ -1323,7 +1323,13 @@
       <option name="project" value="LOCAL" />
       <updated>1445743548669</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="CameraOp Added&#10;http://ftcforum.usfirst.org/showthread.php?4588-How-to-use-the-camera-as-a-sensor&amp;highlight=camera">
+      <created>1445743685403</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1445743685403</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
