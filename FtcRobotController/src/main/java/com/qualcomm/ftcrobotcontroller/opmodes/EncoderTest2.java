@@ -106,7 +106,7 @@ public class EncoderTest2 extends OpMode {
 		 *    "servo_1" controls the rZip joint of the manipulator.
 		 *    "servo_6" controls the lZip joint of the manipulator.
 		 */
-		armMotor = hardwareMap.dcMotor.get("rZip");
+		armMotor = hardwareMap.dcMotor.get("arm");
 		motorRight = hardwareMap.dcMotor.get("ldrive");
 		motorLeft = hardwareMap.dcMotor.get("rdrive");
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
