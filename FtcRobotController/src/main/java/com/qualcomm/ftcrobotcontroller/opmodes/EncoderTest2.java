@@ -170,6 +170,7 @@ public class EncoderTest2 extends OpMode {
 			{armMotor.setPower(.5);}
 			if (armMotor.getCurrentPosition() >= 1000)
 			{armMotor.setPower(0);}}
+		//Todo PID control for 500
 		else if (gamepad2.b) {
 			if (armMotor.getCurrentPosition()>500)
 			{armMotor.setPower(-.5);}

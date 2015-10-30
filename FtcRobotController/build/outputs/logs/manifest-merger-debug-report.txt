@@ -71,11 +71,15 @@ MERGED from :FtcCommon-release::17:5
 uses-permission#android.permission.CAMERA
 ADDED from AndroidManifest.xml:35:3
 	android:name
-		ADDED from AndroidManifest.xml:36:7
+		ADDED from AndroidManifest.xml:35:20
 uses-feature#android.hardware.camera
 ADDED from AndroidManifest.xml:37:3
 	android:name
-		ADDED from AndroidManifest.xml:38:7
+		ADDED from AndroidManifest.xml:37:17
+uses-feature#android.hardware.camera.front
+ADDED from AndroidManifest.xml:38:3
+	android:name
+		ADDED from AndroidManifest.xml:38:17
 uses-feature#android.hardware.usb.accessory
 ADDED from AndroidManifest.xml:41:3
 	android:name

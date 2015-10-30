@@ -59,8 +59,6 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     manager.register("EncoderTest", EncoderTest.class);
     manager.register("K9TeleOp", K9TeleOp.class);
-    manager.register ("PushBotAuto", PushBotOdsFollowEvent.PushBotAuto.class);
-    manager.register ("PushBotManual", PushBotManual.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
@@ -82,7 +80,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     
     manager.register ("AutoLinear", AutoLinearTest.class);
     manager.register ("AutoTime", AutoTimeTest.class);
-    //manager.register ("PushBotIrEvent", PushBotIrEvent.class);
+    manager.register ("SSTeleOp", SSTeleOp.class);
     
     //manager.register ("PushBotManualSensors", PushBotManualSensors.class);
     //manager.register ("PushBotOdsDetectEvent", PushBotOdsDetectEvent.class);
