@@ -47,33 +47,31 @@ import java.util.Date;
  * TeleOp Mode
  *Enables control of the robot via the gamepad
  */
-public class SensorTestOp extends OpMode implements SensorEventListener{
+public class AccelZTEstOp extends OpMode implements SensorEventListener{
 
   private String startDate;
   private ElapsedTime runtime = new ElapsedTime();
   private SensorManager mSensorManager;
   private Sensor accelerometer;
-  private Sensor magnetometer;
+//  private Sensor magnetometer;
   // orientation values
-  private float azimuth = 0.0f;      // value in radians
-  private float pitch = 0.0f;        // value in radians
-  private float roll = 0.0f;         // value in radians
+  private float x = 0.0f;   // m/s2 reads short side (buttons up +)
+  private float y = 0.0f;   // m/s2 reads long side  (normal text orientation +)
+  private float z = 0.0f;   // m/s2 reads screen side (screen uo+)
 
   private float[] mGravity;       // latest sensor values
-  private float[] mGeomagnetic;   // latest sensor values
 
   //Constructor
 
-  public SensorTestOp(){}
+  public AccelZTEstOp(){}
 
   @Override
   public void init() {
     mSensorManager = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
     accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-    magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-    azimuth = 0.0f;      // value in radians
-    pitch = 0.0f;        // value in radians
-    roll = 0.0f;
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
   }
   /* Code to run when the op mode is first enabled goes here
   * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
@@ -84,7 +82,6 @@ public class SensorTestOp extends OpMode implements SensorEventListener{
 
     // delay value is SENSOR_DELAY_UI which is ok for telemetry, maybe not for actual robot use
     mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
-    mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
   }
 
 
@@ -108,9 +105,9 @@ public class SensorTestOp extends OpMode implements SensorEventListener{
 
     telemetry.addData("Started At", startDate);
     telemetry.addData("Running For", runtime.toString());
-    telemetry.addData("azimuth", Math.round(Math.toDegrees(azimuth)));
-    telemetry.addData("pitch", Math.round(Math.toDegrees(pitch)));
-    telemetry.addData("roll", Math.round(Math.toDegrees(roll)));
+    telemetry.addData("x", x);
+    telemetry.addData("y", y);
+    telemetry.addData("z", z);
 
   }
 
@@ -133,22 +130,13 @@ public class SensorTestOp extends OpMode implements SensorEventListener{
     if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
       mGravity = event.values;
     }
-    if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-      mGeomagnetic = event.values;
-    }
-    if (mGravity != null && mGeomagnetic != null) {  //make sure we have both before calling getRotationMatrix
-      float R[] = new float[9];
-      float I[] = new float[9];
-      boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-      if (success) {
-        float orientation[] = new float[3];
-        SensorManager.getOrientation(R, orientation);
-        azimuth = orientation[0]; // orientation contains: azimuth, pitch and roll
-        pitch = orientation[1];
-        roll = orientation[2];
-      }
+    if (mGravity != null) {
+      x = event.values[0];
+      y = event.values[1];
+      z = event.values[2];
+     }
     }
   }
 
 
-}
+

@@ -54,21 +54,21 @@ public class FtcOpModeRegister implements OpModeRegister {
      *
      * If two or more op modes are registered with the same name, the app will display an error.
      */
+/*
+     * Uncomment any of the following lines if you want to register an op mode.
+     */
+
 
     manager.register("NullOp", NullOp.class);
 
     manager.register("EncoderTest", EncoderTest.class);
-    manager.register("K9TeleOp", K9TeleOp.class);
-
-    /*
-     * Uncomment any of the following lines if you want to register an op mode.
-     */
-
+    manager.register("CameraOp", CameraOp.class);
+    //manager.register("K9TeleOp", K9TeleOp.class);
     //manager.register("AdafruitRGBExample", AdafruitRGBExample.class);
     //manager.register("ColorSensorDriver", ColorSensorDriver.class);
 
-    manager.register("USonic", UltrasonicOp.class);
-    //manager.register("CompassCalibration", CompassCalibration.class);
+    manager.register("LegacySensor", LegacySensorOp.class);
+    manager.register("SensorTest", SensorTestOp.class);
     //manager.register("I2cAddressChangeExample", LinearI2cAddressChange.class);
 
 
@@ -78,11 +78,10 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("LinearIrExample", LinearIrExample.class);
 
     
-    manager.register ("AutoLinear", AutoLinearTest.class);
+    //manager.register ("AutoLinear", AutoLinearTest.class);
     manager.register ("AutoTime", AutoTimeTest.class);
     manager.register ("SSTeleOp", SSTeleOp.class);
-    
-    //manager.register ("PushBotManualSensors", PushBotManualSensors.class);
+    manager.register ("AccelTest", AccelZTEstOp.class);
     //manager.register ("PushBotOdsDetectEvent", PushBotOdsDetectEvent.class);
     //manager.register ("PushBotOdsFollowEvent", PushBotOdsFollowEvent.class);
     //manager.register ("PushBotTouchEvent", PushBotTouchEvent.class);    

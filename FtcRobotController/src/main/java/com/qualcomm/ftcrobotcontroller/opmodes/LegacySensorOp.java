@@ -32,44 +32,49 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
+//import com.qualcomm.robotcore.hardware.GyroSensor;
 
 /**
  * Ultrasonic
- * <p>
- * How to use: <br>
+ * How to use:
  * Ultrasonic sensor must be plugged into Legacy Module port 4 or 5
  */
-public class UltrasonicOp extends OpMode {
+public class LegacySensorOp extends OpMode {
 
   final static double MOTOR_POWER = 0.15; // Higher values will cause the robot to move faster
 
   final static double HOLD_IR_SIGNAL_STRENGTH = 0.20; // Higher values will cause the robot to follow closer
 
+//  GyroSensor gyro;
   UltrasonicSensor uSonic;
-  DcMotor motorRight;
-  DcMotor motorLeft;
+  TouchSensor touch;
+//  DcMotor motorRight;
+//  DcMotor motorLeft;
 
   @Override
   public void init() {
+//    gyro = hardwareMap.gyroSensor.get("gyro");
     uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
-    motorRight = hardwareMap.dcMotor.get("ldrive");
-    motorLeft = hardwareMap.dcMotor.get("rdrive");
+    touch = hardwareMap.touchSensor.get("touch");
+//    motorRight = hardwareMap.dcMotor.get("ldrive");
+//    motorLeft = hardwareMap.dcMotor.get("rdrive");
+//    motorLeft.setDirection(DcMotor.Direction.REVERSE);
   }
 
   @Override
-  public void start() {
-    motorLeft.setDirection(DcMotor.Direction.REVERSE);
-  }
+  public void start() { }
 
   @Override
   public void loop() {
 
     double sonic = uSonic.getUltrasonicLevel();
+    boolean pressed = touch.isPressed();
     // convert ultrasonic level to inches
     double distance = 0.40538*sonic-1.17;
-
+//    double angle = gyro.getRotation();
+/*
       if (distance > 5) {
         // we need to move to the left
         motorRight.setPower(MOTOR_POWER);
@@ -79,8 +84,11 @@ public class UltrasonicOp extends OpMode {
         motorRight.setPower(0.0);
         motorLeft.setPower(0.0);
       }
+*/
 
     telemetry.addData("distance", distance);
+    telemetry.addData("touch", pressed);
+//    telemetry.addData("gyro",angle);
 
     DbgLog.msg(uSonic.toString());
   }

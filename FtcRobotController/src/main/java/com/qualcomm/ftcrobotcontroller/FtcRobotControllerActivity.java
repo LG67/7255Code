@@ -177,6 +177,9 @@ public class FtcRobotControllerActivity extends Activity {
 
     hittingMenuButtonBrightensScreen();
 
+    camera=Camera.open();
+//    camera=openFrontFacingCamera();
+
     if (USE_DEVICE_EMULATION) { ModernRoboticsHardwareFactory.enableDeviceEmulation(); }
   }
 
