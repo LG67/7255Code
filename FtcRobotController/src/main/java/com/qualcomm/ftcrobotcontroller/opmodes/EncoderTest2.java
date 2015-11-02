@@ -34,7 +34,6 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -71,8 +70,8 @@ public class EncoderTest2 extends OpMode {
 	DcMotor armMotor;
 	DcMotor motorRight;
 	DcMotor motorLeft;
-	Servo lZip;
-	Servo rZip;
+//	Servo lZip;
+//	Servo rZip;
 
 	/**
 	 * Constructor
@@ -111,8 +110,8 @@ public class EncoderTest2 extends OpMode {
 		motorLeft = hardwareMap.dcMotor.get("rdrive");
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
 		
-		rZip = hardwareMap.servo.get("servo1");
-		lZip = hardwareMap.servo.get("servo2");
+//		rZip = hardwareMap.servo.get("servo1");
+//		lZip = hardwareMap.servo.get("servo2");
 
 		// assign the starting position of the wrist and lZip
 		armPosition = 0.2;
@@ -153,7 +152,6 @@ public class EncoderTest2 extends OpMode {
 		// the robot more precisely at slower speeds.
 		right = (float)scaleInput(right);
 		left =  (float)scaleInput(left);
-		
 		// write the values to the motors
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
@@ -166,21 +164,19 @@ public class EncoderTest2 extends OpMode {
 		}
 		// update the position of the rZip.
 		if (gamepad2.a) {
-			if (armMotor.getCurrentPosition()<1000)
-			{armMotor.setPower(.5);}
-			if (armMotor.getCurrentPosition() >= 1000)
-			{armMotor.setPower(0);}}
-		//Todo PID control for 500
+			float adelta = 1000 - armMotor.getCurrentPosition();
+			if (Math.abs(adelta)>50){
+			armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
+			else {armMotor.setPower(0);}}				//+/-10 tick deadband
 		else if (gamepad2.b) {
-			if (armMotor.getCurrentPosition()>500)
-			{armMotor.setPower(-.5);}
-			if (armMotor.getCurrentPosition()<500)
-			{armMotor.setPower(.5);}
-		}
+			float bdelta = 500 - armMotor.getCurrentPosition();
+			if (Math.abs(bdelta)>50){
+				armMotor.setPower(controlOut(bdelta));}
+			else {armMotor.setPower(0);}}
 		else
 		   {armMotor.setPower(arm);}
 
-		if (gamepad1.a) {
+/*		if (gamepad1.a) {
 			// if the A button is pushed on gamepad1, increment the position of
 			// the rZip servo.
 			armPosition += armDelta;
@@ -209,7 +205,7 @@ public class EncoderTest2 extends OpMode {
 		rZip.setPosition(armPosition);
 		lZip.setPosition(clawPosition);
 
-
+*/
 
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
@@ -218,11 +214,11 @@ public class EncoderTest2 extends OpMode {
 		 * are currently write only.
 		 */
         telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
-        telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
+//        telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
+//        telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
-		telemetry.addData("rZip",  "rZip pwr: " +  armMotor.getCurrentPosition() );
+		telemetry.addData("arm", armMotor.getCurrentPosition() );
 
 	}
 
@@ -269,6 +265,17 @@ public class EncoderTest2 extends OpMode {
 
 		// return scaled value.
 		return dScale;
+	}
+
+	/*
+	 * This method provides proportional position control
+	 */
+
+	double controlOut(double delta){
+		double pOut;
+		pOut=.5*delta;
+		pOut=scaleInput(pOut);
+		return pOut;
 	}
 
 }

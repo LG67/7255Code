@@ -61,7 +61,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     manager.register("NullOp", NullOp.class);
 
-    manager.register("EncoderTest", EncoderTest.class);
+    manager.register("EncoderTest", EncoderTest2.class);
     manager.register("CameraOp", CameraOp.class);
     //manager.register("K9TeleOp", K9TeleOp.class);
     //manager.register("AdafruitRGBExample", AdafruitRGBExample.class);
