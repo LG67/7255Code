@@ -32,6 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 /**
  * Example autonomous program.
@@ -43,31 +45,28 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
  * The method getRunTime() returns the time that has elapsed since the op mode
  * starting running to when the method was called.
  */
-public class AutoTimeTest extends OpMode {
+public class AutonomousToBeacon extends OpMode {
 
 	//double lZipPosition;
 	//double rZipPosition;
 
-//	DcMotor frontRight;
-//	DcMotor frontLeft;
-//	DcMotor backRight;
-//	DcMotor backLeft;
-//	UltrasonicSensor uSonic;
+	DcMotor frontRight;
+	DcMotor frontLeft;
+	DcMotor backRight;
+	DcMotor backLeft;
+	UltrasonicSensor uSonic;
 
 //	Servo lZip;
 //	Servo rZip;
 
-	//	double left = 0.0;
-//	double right = 0.0;
-	double t = 0, x=0;
-	double tLoop = 0, tNew = 0;
-	int loop = 0, step = 0;
+	double left = 0.0;
+	double right = 0.0;
 
 
 	/**
 	 * Constructor
 	 */
-	public AutoTimeTest() {
+	public AutonomousToBeacon() {
 
 	}
 
@@ -95,13 +94,14 @@ public class AutoTimeTest extends OpMode {
 		 *    "servo_1" controls the rZip joint of the manipulator.
 		 *    "servo_6" controls the lZip joint of the manipulator.
 		 */
-//		frontRight = hardwareMap.dcMotor.get("rdrivef");
-//		frontLeft = hardwareMap.dcMotor.get("ldrivef");
-//		frontLeft.setDirection(DcMotor.Direction.REVERSE);
-//		backRight = hardwareMap.dcMotor.get("rdriveb");
-//		backLeft = hardwareMap.dcMotor.get("ldriveb");
-//		backLeft.setDirection(DcMotor.Direction.REVERSE);
-//		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
+		frontRight = hardwareMap.dcMotor.get("rdrivef");
+		frontLeft = hardwareMap.dcMotor.get("ldrivef");
+		frontLeft.setDirection(DcMotor.Direction.REVERSE);
+		backRight = hardwareMap.dcMotor.get("rdriveb");
+		backLeft = hardwareMap.dcMotor.get("ldriveb");
+		backLeft.setDirection(DcMotor.Direction.REVERSE);
+		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
+
 //		rZip = hardwareMap.servo.get("servo1");
 //		lZip = hardwareMap.servo.get("servo2");
 
@@ -117,48 +117,61 @@ public class AutoTimeTest extends OpMode {
 	 */
 	@Override
 	public void loop() {
-		if (loop == 0) {
-			t = this.time;
-		}
-		else {
-			tLoop = this.time - t;
-			if (tLoop<5){
-				telemetry.addData("step ", 1);
-			}
-			else if (tLoop>=5 && tLoop<10){
-				telemetry.addData("step ", 2);
-			}
-			else if (tLoop >=10 && tLoop<10.05){
-				x = this.time;
-			}
-			else {
-				telemetry.addData("step ", "out");
-				tNew = this.time - x;
-			}
-		}
+
+		// keep manipulator out of the way.
+//		rZip.setPosition(lZipPosition);
+//		lZip.setPosition(rZipPosition);
+
+
+        /*
+         * Use the 'time' variable of this op mode to determine
+         * how to adjust the motor power.
+         */
+		double sonic = uSonic.getUltrasonicLevel();
+		// convert ultrasonic level to inches
+		double distance = 0.40538*sonic-1.17;
+
+		if (distance > 8) {
+						// we need to move to the left
+			left = 0.96;
+			right = 0.13;
+
+		}  else {
+			left = 0.0;
+			right = 0.0;
+			// the IR signal is strong, stay here
+
+
+        }
+
+		/*
+		 * set the motor power
+		 */
+        frontRight.setPower(right);
+        frontLeft.setPower(left);
+		backLeft.setPower(left);
+		backRight.setPower(right);
+
 		 /* Send telemetry data back to driver station. Note that if we are using
 		 * a legacy NXT-compatible motor controller, then the getPower() method
 		 * will return a null value. The legacy NXT-compatible motor controllers
 		 * are currently write only.
 		 */
 
-			telemetry.addData("Text", "*** Robot Data***");
-			telemetry.addData("elapsed time ", Double.toString(this.time));
-			telemetry.addData("loop time ", Double.toString(tLoop));
-			telemetry.addData("reset time", Double.toString(t));
-			telemetry.addData("new time", Double.toString(tNew));
-			telemetry.addData("x", Double.toString(x));
-			loop++;
-
+		telemetry.addData("Text", "*** Robot Data***");
+        telemetry.addData("elapsed time ", Double.toString(this.time));
+		telemetry.addData("left pwr ", Double.toString(left));
+		telemetry.addData("right pwr", Double.toString(right));
 	}
+
 	/*
 	 * Code to run when the op mode is first disabled goes here
 	 * 
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#stop()
 	 */
-		@Override
-		public void stop () {
-
-		}
+	@Override
+	public void stop() {
 
 	}
+
+}

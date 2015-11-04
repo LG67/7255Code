@@ -69,8 +69,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     manager.register("LegacySensor", LegacySensorOp.class);
     manager.register("SensorTest", SensorTestOp.class);
-    //manager.register("I2cAddressChangeExample", LinearI2cAddressChange.class);
-
+    manager.register("AutonomousToBeacon", AutonomousToBeacon.class);
 
     //manager.register("NxtTeleOp", NxtTeleOp.class);
     
