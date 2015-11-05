@@ -81,7 +81,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register ("AutoTime", AutoTimeTest.class);
     manager.register ("SSTeleOp", SSTeleOp.class);
     manager.register ("AccelTest", AccelZTEstOp.class);
-    //manager.register ("PushBotOdsDetectEvent", PushBotOdsDetectEvent.class);
+    manager.register ("Case", CaseStructureTest.class);
     //manager.register ("PushBotOdsFollowEvent", PushBotOdsFollowEvent.class);
     //manager.register ("PushBotTouchEvent", PushBotTouchEvent.class);    
     
