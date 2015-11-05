@@ -45,8 +45,8 @@ public class K9TeleOp extends OpMode {
 	
 	/*
 	 * Note: the configuration of the servos is such that
-	 * as the rZip servo approaches 0, the rZip position moves up (away from the floor).
-	 * Also, as the lZip servo approaches 0, the lZip opens up (drops the game element).
+	 * as the arm servo approaches 0, the arm position moves up (away from the floor).
+	 * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
 	 */
 	// TETRIX VALUES.
 	final static double ARM_MIN_RANGE  = 0.20;
@@ -54,16 +54,16 @@ public class K9TeleOp extends OpMode {
 	final static double CLAW_MIN_RANGE  = 0.20;
 	final static double CLAW_MAX_RANGE  = 0.7;
 
-	// position of the rZip servo.
+	// position of the arm servo.
 	double armPosition;
 
-	// amount to change the rZip servo position.
+	// amount to change the arm servo position.
 	double armDelta = 0.1;
 
-	// position of the lZip servo
+	// position of the claw servo
 	double clawPosition;
 
-	// amount to change the lZip servo position by
+	// amount to change the claw servo position by
 	double clawDelta = 0.1;
 
 	DcMotor motorRight;
@@ -100,8 +100,8 @@ public class K9TeleOp extends OpMode {
 		 *   "motor_2" is on the left side of the bot and reversed.
 		 *   
 		 * We also assume that there are two servos "servo_1" and "servo_6"
-		 *    "servo_1" controls the rZip joint of the manipulator.
-		 *    "servo_6" controls the lZip joint of the manipulator.
+		 *    "servo_1" controls the arm joint of the manipulator.
+		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
 		motorRight = hardwareMap.dcMotor.get("motor_2");
 		motorLeft = hardwareMap.dcMotor.get("motor_1");
@@ -110,7 +110,7 @@ public class K9TeleOp extends OpMode {
 		arm = hardwareMap.servo.get("servo_1");
 		claw = hardwareMap.servo.get("servo_6");
 
-		// assign the starting position of the wrist and lZip
+		// assign the starting position of the wrist and claw
 		armPosition = 0.2;
 		clawPosition = 0.2;
 	}
@@ -127,7 +127,7 @@ public class K9TeleOp extends OpMode {
 		 * Gamepad 1
 		 * 
 		 * Gamepad 1 controls the motors via the left stick, and it controls the
-		 * wrist/lZip via the a,b, x, y buttons
+		 * wrist/claw via the a,b, x, y buttons
 		 */
 
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
@@ -152,20 +152,20 @@ public class K9TeleOp extends OpMode {
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
 
-		// update the position of the rZip.
+		// update the position of the arm.
 		if (gamepad1.a) {
 			// if the A button is pushed on gamepad1, increment the position of
-			// the rZip servo.
+			// the arm servo.
 			armPosition += armDelta;
 		}
 
 		if (gamepad1.y) {
 			// if the Y button is pushed on gamepad1, decrease the position of
-			// the rZip servo.
+			// the arm servo.
 			armPosition -= armDelta;
 		}
 
-		// update the position of the lZip
+		// update the position of the claw
 		if (gamepad1.x) {
 			clawPosition += clawDelta;
 		}
@@ -178,7 +178,7 @@ public class K9TeleOp extends OpMode {
         armPosition = Range.clip(armPosition, ARM_MIN_RANGE, ARM_MAX_RANGE);
         clawPosition = Range.clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE);
 
-		// write position values to the wrist and lZip servo
+		// write position values to the wrist and claw servo
 		arm.setPosition(armPosition);
 		claw.setPosition(clawPosition);
 
@@ -191,8 +191,8 @@ public class K9TeleOp extends OpMode {
 		 * are currently write only.
 		 */
         telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
-        telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
+        telemetry.addData("arm", "arm:  " + String.format("%.2f", armPosition));
+        telemetry.addData("claw", "claw:  " + String.format("%.2f", clawPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
 

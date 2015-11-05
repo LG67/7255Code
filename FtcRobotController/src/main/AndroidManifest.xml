@@ -2,9 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="com.qualcomm.ftcrobotcontroller"
-          android:versionCode="3"
-          android:versionName="User Developed App">
+          android:versionCode="5"
+          android:versionName="1.25">
 
+
+
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-feature android:name="android.hardware.camera" />
+  <uses-feature android:name="android.hardware.camera.front" />
 
   <uses-permission
     android:name="android.permission.ACCESS_WIFI_STATE"
@@ -30,13 +35,6 @@
   <uses-permission
     android:name="android.permission.WRITE_SETTINGS"
     android:required="true" />
-
-  <!--camera -->
-  <uses-permission android:name="android.permission.CAMERA" />
-
-  <uses-feature android:name="android.hardware.camera" />
-  <uses-feature android:name="android.hardware.camera.front" />
-  <!--camera -->
 
   <uses-feature android:name="android.hardware.usb.accessory" />
 
