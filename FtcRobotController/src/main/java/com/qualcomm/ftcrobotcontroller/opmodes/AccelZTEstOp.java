@@ -40,6 +40,7 @@ import android.hardware.SensorManager;
 //These should already be included
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 //May not be necessary or included in other op modes
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,7 +80,7 @@ public class AccelZTEstOp extends OpMode implements SensorEventListener{
   */
   @Override
   public void start() {
-    startDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+//    startDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
 
     // delay value is SENSOR_DELAY_UI which is ok for telemetry, maybe not for actual robot use
     mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
@@ -92,9 +93,9 @@ public class AccelZTEstOp extends OpMode implements SensorEventListener{
      */
   @Override
   public void init_loop() {
-    startDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+//    startDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
     runtime.reset();
-    telemetry.addData("Null Op Init Loop", runtime.toString());
+    telemetry.addData("Init Loop Time", runtime.toString());
   }
 
   /*
@@ -103,8 +104,7 @@ public class AccelZTEstOp extends OpMode implements SensorEventListener{
    */
   @Override
   public void loop()  {
-
-    telemetry.addData("Started At", startDate);
+//    telemetry.addData("Started At", startDate);
     telemetry.addData("Running For", runtime.toString());
     telemetry.addData("x", x);
     telemetry.addData("y", y);

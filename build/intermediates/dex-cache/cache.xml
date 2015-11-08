@@ -2,88 +2,46 @@
 <items version="2" >
 
     <item
-        jar="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/exploded-aar/RobotCore-release/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2ec6f06847bccfe30fb8f8f75ce888721e4fd275">
-        <dex dex="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/pre-dexed/debug/classes-8418152cb45c0f417814a7b144f931a011f217aa.jar" />
-    </item>
-    <item
-        jar="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/exploded-aar/WirelessP2p-release/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ebf8372b5bc9dc9f596ed438df36481099d51c41">
-        <dex dex="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/pre-dexed/debug/classes-22b34624960304b45fbbe116b856bb24f6b04e5c.jar" />
-    </item>
-    <item
-        jar="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/exploded-aar/ModernRobotics-release/jars/classes.jar"
+        jar="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\exploded-aar\ModernRobotics-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="ad4adcdf8eb6ff2b3b4fe9f1d676f099db621d60">
-        <dex dex="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/pre-dexed/debug/classes-6c321da199a46de60ce1b673cdd2af6799196e33.jar" />
+        <dex dex="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\pre-dexed\debug\classes-e60fa82a46d3eaffa386ddc1945b212676752dcc.jar" />
     </item>
     <item
-        jar="/home/tesla/7255Code/FtcRobotController/build/intermediates/exploded-aar/Analytics-release/jars/classes.jar"
+        jar="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\exploded-aar\Analytics-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="23c74caa2b901107adc4d0aec343c5b8e8be86fb">
-        <dex dex="/home/tesla/7255Code/FtcRobotController/build/intermediates/pre-dexed/debug/classes-56e3d51398e38191162d02759df8f8f030614f56.jar" />
+        <dex dex="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\pre-dexed\debug\classes-862dcd71fb778ce2a7bddcae8b47e9802b3deef9.jar" />
     </item>
     <item
-        jar="/home/tesla/7255Code/FtcRobotController/build/intermediates/exploded-aar/WirelessP2p-release/jars/classes.jar"
+        jar="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\exploded-aar\FtcCommon-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6da7d9bc8c9a82321450b6b4273d1746b6cade21">
+        <dex dex="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\pre-dexed\debug\classes-e9eee3f43c46ec3328df787282a2729613a1b174.jar" />
+    </item>
+    <item
+        jar="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\exploded-aar\WirelessP2p-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="ebf8372b5bc9dc9f596ed438df36481099d51c41">
-        <dex dex="/home/tesla/7255Code/FtcRobotController/build/intermediates/pre-dexed/debug/classes-a075c94cc98eac966af09194ef0b9841c75c642b.jar" />
+        <dex dex="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\pre-dexed\debug\classes-bf7c7180cb5f86d26dfcca6aa806c7b3ca59c3cd.jar" />
     </item>
     <item
-        jar="/home/tesla/7255Code/FtcRobotController/build/intermediates/exploded-aar/ModernRobotics-release/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ad4adcdf8eb6ff2b3b4fe9f1d676f099db621d60">
-        <dex dex="/home/tesla/7255Code/FtcRobotController/build/intermediates/pre-dexed/debug/classes-b09f455aa150e709fdbafeae045448e8a3418d8d.jar" />
-    </item>
-    <item
-        jar="/home/tesla/7255Code/FtcRobotController/build/intermediates/exploded-aar/FtcCommon-release/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="6da7d9bc8c9a82321450b6b4273d1746b6cade21">
-        <dex dex="/home/tesla/7255Code/FtcRobotController/build/intermediates/pre-dexed/debug/classes-ee779b7ba154659d759490102a119ca6d579932d.jar" />
-    </item>
-    <item
-        jar="/home/tesla/7255Code/FtcRobotController/build/intermediates/exploded-aar/Hardware-release/jars/classes.jar"
+        jar="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\exploded-aar\Hardware-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="55ecd0b0517650a2cffd06137a40de8af3bbbde3">
-        <dex dex="/home/tesla/7255Code/FtcRobotController/build/intermediates/pre-dexed/debug/classes-961f8547d6e52568585dc9ec22cdcc85db9296df.jar" />
+        <dex dex="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\pre-dexed\debug\classes-7fb67d8bc66ac7e23a9d251e23336137605f8c8b.jar" />
     </item>
     <item
-        jar="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/exploded-aar/FtcCommon-release/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="6da7d9bc8c9a82321450b6b4273d1746b6cade21">
-        <dex dex="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/pre-dexed/debug/classes-f375ea45d1a3466153edc8a0f5a2ec3f368a8ae0.jar" />
-    </item>
-    <item
-        jar="/home/tesla/7255Code/FtcRobotController/build/intermediates/exploded-aar/RobotCore-release/jars/classes.jar"
+        jar="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\exploded-aar\RobotCore-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="2ec6f06847bccfe30fb8f8f75ce888721e4fd275">
-        <dex dex="/home/tesla/7255Code/FtcRobotController/build/intermediates/pre-dexed/debug/classes-7530e087c84f0e14ca4b04672bbade38c2c20e3e.jar" />
-    </item>
-    <item
-        jar="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/exploded-aar/Hardware-release/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="55ecd0b0517650a2cffd06137a40de8af3bbbde3">
-        <dex dex="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/pre-dexed/debug/classes-1d4cc91d4a2eeadd6ffa752143696d64531b0c4c.jar" />
-    </item>
-    <item
-        jar="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/exploded-aar/Analytics-release/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="23c74caa2b901107adc4d0aec343c5b8e8be86fb">
-        <dex dex="/home/tesla/Downloads/ftc_app-master/FtcRobotController/build/intermediates/pre-dexed/debug/classes-93e5918ec4f47f6d13742877df766b076f9577d6.jar" />
+        <dex dex="C:\Users\Lori\Documents\7255FTC\2015\2015 FTC Programming\7255Code\FtcRobotController\build\intermediates\pre-dexed\debug\classes-168d81f38538b84d7aaea65a1f6610916a0ebcd2.jar" />
     </item>
 
 </items>
