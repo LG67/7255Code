@@ -62,6 +62,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 //    manager.register("K9Line", K9Line.class);
     manager.register ("Camera", CameraOp.class);
     manager.register ("Accel", AccelZTEstOp.class);
+    manager.register ("Teleop", TestTeleOp.class);
 
 
 

@@ -34,13 +34,15 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+
 
 /**
  * TeleOp Mode
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class SSTeleOp extends OpMode {
+public class TestTeleOp extends OpMode {
 
 	/*
 	 * Note: the configuration of the servos is such that
@@ -48,33 +50,18 @@ public class SSTeleOp extends OpMode {
 	 * Also, as the lZip servo approaches 0, the lZip opens up (drops the game element).
 	 */
 	// TETRIX VALUES.
-//	final static double ARM_MIN_RANGE  = 0.20;
-//	final static double ARM_MAX_RANGE  = 0.90;
-//	final static double CLAW_MIN_RANGE  = 0.20;
-//	final static double CLAW_MAX_RANGE  = 0.7;
 
-	// position of the rZip servo.
-//	double armPosition;
 
-	// amount to change the rZip servo position.
-//	double armDelta = 0.1;
-
-	// position of the lZip servo
-//	double clawPosition;
-
-	// amount to change the lZip servo position by
-//	double clawDelta = 0.1;
-
+	DcMotorController core;
 	DcMotor motorRight;
 	DcMotor motorLeft;
-//	Servo claw;
-//	Servo arm;
+	DcMotor armMotor;
 	DcMotor motorfRight;
 	DcMotor motorfLeft;
 	/**
 	 * Constructor
 	 */
-	public SSTeleOp() {
+	public TestTeleOp() {
 
 	}
 
@@ -103,21 +90,15 @@ public class SSTeleOp extends OpMode {
 		 *    "servo_1" controls the rZip joint of the manipulator.
 		 *    "servo_6" controls the lZip joint of the manipulator.
 		 */
+
 		motorRight = hardwareMap.dcMotor.get("rdriveb");
 		motorfRight = hardwareMap.dcMotor.get("rdrivef");
 		motorLeft = hardwareMap.dcMotor.get("ldriveb");
 		motorfLeft = hardwareMap.dcMotor.get("ldrivef");
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
 		motorfLeft.setDirection(DcMotor.Direction.REVERSE);
+		armMotor = hardwareMap.dcMotor.get("arm");
 
-
-
-		//arm = hardwareMap.servo.get("servo_1");
-		//claw = hardwareMap.servo.get("servo_6");
-
-		// assign the starting position of the wrist and lZip
-		//armPosition = 0.2;
-		//clawPosition = 0.2;
 	}
 
 	/*
@@ -143,54 +124,44 @@ public class SSTeleOp extends OpMode {
 		float direction = gamepad1.right_stick_x;
 		float right = throttle - direction;
 		float left = throttle + direction;
+        float arm = -gamepad2.left_stick_y;
 
 		// clip the right/left values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
+        arm = Range.clip(arm, -1, 1);
 
 		// scale the joystick value to make it easier to control
 		// the robot more precisely at slower speeds.
 		right = (float)scaleInput(right);
 		left =  (float)scaleInput(left);
-		
+        arm = (float)scaleInput(arm);
+
 		// write the values to the motors
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
 		motorfRight.setPower(right);
 		motorfLeft.setPower(left);
 
-
-
-		// update the position of the rZip.
-		/*if (gamepad1.a) {
-			// if the A button is pushed on gamepad1, increment the position of
-			// the rZip servo.
-			//armPosition += armDelta;
-		}
-
-		if (gamepad1.y) {
-			// if the Y button is pushed on gamepad1, decrease the position of
-			// the rZip servo.
-			//armPosition -= armDelta;
-		}
-
-		// update the position of the lZip
-		if (gamepad1.x) {
-			//clawPosition += clawDelta;
-		}
-
-		if (gamepad1.b) {
-			//clawPosition -= clawDelta;
-		}
-
-        // clip the position values so that they never exceed their allowed range.
-       // armPosition = Range.clip(armPosition, ARM_MIN_RANGE, ARM_MAX_RANGE);
-       // clawPosition = Range.clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE);
-
-		// write position values to the wrist and lZip servo
-		//arm.setPosition(armPosition);
-		//claw.setPosition(clawPosition);
-		*/
+        if (gamepad2.dpad_up){
+            armMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        }
+        if (gamepad2.dpad_down){
+            armMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+        // update the position of the rZip.
+        if (gamepad2.a) {
+            float adelta = 10000 - armMotor.getCurrentPosition();
+            if (Math.abs(adelta)>50){
+                armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
+            else {armMotor.setPower(0);}}				//+/-10 tick deadband
+        else if (gamepad2.b) {
+            float bdelta = 5000 - armMotor.getCurrentPosition();
+            if (Math.abs(bdelta)>50){
+                armMotor.setPower(controlOut(bdelta));}
+            else {armMotor.setPower(0);}}
+        else
+        {armMotor.setPower(arm);}
 
 
 		/*
@@ -199,11 +170,12 @@ public class SSTeleOp extends OpMode {
 		 * will return a null value. The legacy NXT-compatible motor controllers
 		 * are currently write only.
 		 */
-        telemetry.addData("Text", "*** Robot Data***");
+
        // telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
        // telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+		telemetry.addData("arm", armMotor.getCurrentPosition() );
 
 	}
 
@@ -251,5 +223,17 @@ public class SSTeleOp extends OpMode {
 		// return scaled value.
 		return dScale;
 	}
+
+	/*
+	 * This method provides proportional position control
+	 */
+
+	double controlOut(double delta){
+		double pOut;
+		pOut=.5*delta;
+		pOut=scaleInput(pOut);
+		return pOut;
+	}
+
 
 }

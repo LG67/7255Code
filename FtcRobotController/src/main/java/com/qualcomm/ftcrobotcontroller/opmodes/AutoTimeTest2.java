@@ -37,6 +37,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class AutoTimeTest2 extends OpMode {
 	private ElapsedTime runtime = new ElapsedTime();
+	double x;
+	double t;
 
 	//Constructor
 	public AutoTimeTest2(){}
@@ -74,12 +76,27 @@ public class AutoTimeTest2 extends OpMode {
 		else if (runtime.time()>=5 && runtime.time()<10) {
 			telemetry.addData("Case ", 2);
 		}
+//		else if (runtime.time()>=10 && runtime.time()<10.01){
+//			runtime.reset();
+//		}
+		else if (runtime.time()>=10 && runtime.time()<10.01){
+			x = runtime.time();
+		}
 		else {
 			telemetry.addData("Case ", 3);
+			t = runtime.time()-x;
 		}
+		if (runtime.time()>10 && t<5) {
+			telemetry.addData("Case ", 4);
+		}
+		if (runtime.time()>10 && (t>=5 && t<10)){
+			telemetry.addData("Case ", 5);
+		}
+
 //    telemetry.addData("Started At", startDate);
 		telemetry.addData("Running For", runtime.toString());
 		telemetry.addData("time ", runtime.time());
+		telemetry.addData("t ", t);
 		telemetry.addData("start time ", runtime.startTime());
 	}
 
