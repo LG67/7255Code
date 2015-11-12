@@ -58,6 +58,7 @@ public class TestTeleOp extends OpMode {
 	DcMotor armMotor;
 	DcMotor motorfRight;
 	DcMotor motorfLeft;
+	DcMotor hook;
 	/**
 	 * Constructor
 	 */
@@ -98,6 +99,7 @@ public class TestTeleOp extends OpMode {
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
 		motorfLeft.setDirection(DcMotor.Direction.REVERSE);
 		armMotor = hardwareMap.dcMotor.get("arm");
+		hook = hardwareMap.dcMotor.get("hook");
 
 	}
 
@@ -120,16 +122,18 @@ public class TestTeleOp extends OpMode {
 		// 1 is full down
 		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
 		// and 1 is full right
-		float throttle = -gamepad1.left_stick_y;
+		float throttle = gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
-		float right = throttle - direction;
-		float left = throttle + direction;
+		float right = throttle + direction;
+		float left = throttle - direction;
         float arm = -gamepad2.left_stick_y;
+		float up =gamepad2.right_stick_y;
 
 		// clip the right/left values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
         arm = Range.clip(arm, -1, 1);
+		up = Range.clip(up, -1, 1);
 
 		// scale the joystick value to make it easier to control
 		// the robot more precisely at slower speeds.
@@ -142,6 +146,7 @@ public class TestTeleOp extends OpMode {
 		motorLeft.setPower(left);
 		motorfRight.setPower(right);
 		motorfLeft.setPower(left);
+		hook .setPower(up);
 
         if (gamepad2.dpad_up){
             armMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -151,12 +156,12 @@ public class TestTeleOp extends OpMode {
         }
         // update the position of the rZip.
         if (gamepad2.a) {
-            float adelta = 10000 - armMotor.getCurrentPosition();
+            float adelta = 20000 - armMotor.getCurrentPosition();
             if (Math.abs(adelta)>50){
                 armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
             else {armMotor.setPower(0);}}				//+/-10 tick deadband
         else if (gamepad2.b) {
-            float bdelta = 5000 - armMotor.getCurrentPosition();
+            float bdelta = 10000 - armMotor.getCurrentPosition();
             if (Math.abs(bdelta)>50){
                 armMotor.setPower(controlOut(bdelta));}
             else {armMotor.setPower(0);}}
