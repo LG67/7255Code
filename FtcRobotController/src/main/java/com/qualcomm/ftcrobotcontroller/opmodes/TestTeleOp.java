@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
@@ -59,6 +60,9 @@ public class TestTeleOp extends OpMode {
 	DcMotor motorfRight;
 	DcMotor motorfLeft;
 	DcMotor hook;
+	Servo rzip;
+	Servo lzip;
+	double zipPosition;
 	/**
 	 * Constructor
 	 */
@@ -80,17 +84,6 @@ public class TestTeleOp extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-		
-		/*
-		 * For the demo Tetrix K9 bot we assume the following,
-		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot and reversed.
-		 *   
-		 * We also assume that there are two servos "servo_1" and "servo_6"
-		 *    "servo_1" controls the rZip joint of the manipulator.
-		 *    "servo_6" controls the lZip joint of the manipulator.
-		 */
 
 		motorRight = hardwareMap.dcMotor.get("rdriveb");
 		motorfRight = hardwareMap.dcMotor.get("rdrivef");
@@ -100,6 +93,12 @@ public class TestTeleOp extends OpMode {
 		motorfLeft.setDirection(DcMotor.Direction.REVERSE);
 		armMotor = hardwareMap.dcMotor.get("arm");
 		hook = hardwareMap.dcMotor.get("hook");
+		lzip = hardwareMap.servo.get("lzip");
+		rzip = hardwareMap.servo.get("rzip");
+
+		lzip.setPosition(0);
+		rzip.setPosition(0);
+
 
 	}
 
@@ -110,13 +109,6 @@ public class TestTeleOp extends OpMode {
 	 */
 	@Override
 	public void loop() {
-
-		/*
-		 * Gamepad 1
-		 * 
-		 * Gamepad 1 controls the motors via the left stick, and it controls the
-		 * wrist/lZip via the a,b, x, y buttons
-		 */
 
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
 		// 1 is full down
@@ -168,6 +160,19 @@ public class TestTeleOp extends OpMode {
         else
         {armMotor.setPower(arm);}
 
+		if (gamepad1.a) {
+			// if the A button is pushed on gamepad1, increment the position of
+			// the arm servo.
+			zipPosition = 0.95;
+		}
+
+		if (gamepad1.y) {
+			// if the Y button is pushed on gamepad1, decrease the position of
+			// the arm servo.
+			zipPosition = 0;
+		}
+
+		lzip.setPosition(zipPosition);
 
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
