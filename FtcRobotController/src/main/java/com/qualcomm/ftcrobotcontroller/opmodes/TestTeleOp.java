@@ -63,6 +63,8 @@ public class TestTeleOp extends OpMode {
 	Servo rzip;
 	Servo lzip;
 	double zipPosition;
+	float up;
+	float arm;
 	/**
 	 * Constructor
 	 */
@@ -77,19 +79,16 @@ public class TestTeleOp extends OpMode {
 	 */
 	@Override
 	public void init() {
-
-
 		/*
 		 * Use the hardwareMap to get the dc motors and servos by name. Note
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-
 		motorRight = hardwareMap.dcMotor.get("rdriveb");
 		motorfRight = hardwareMap.dcMotor.get("rdrivef");
 		motorLeft = hardwareMap.dcMotor.get("ldriveb");
-		motorfLeft = hardwareMap.dcMotor.get("ldrivef");
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
+		motorfLeft = hardwareMap.dcMotor.get("ldrivef");
 		motorfLeft.setDirection(DcMotor.Direction.REVERSE);
 		armMotor = hardwareMap.dcMotor.get("arm");
 		hook = hardwareMap.dcMotor.get("hook");
@@ -110,81 +109,92 @@ public class TestTeleOp extends OpMode {
 	@Override
 	public void loop() {
 
-		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
-		// 1 is full down
-		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
-		// and 1 is full right
+		//GAMEPAD1
+		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and 1 is full down
+		// direction: left_stick_x ranges from -1 to 1, where -1 is full left and 1 is full right
 		float throttle = gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
 		float right = throttle + direction;
 		float left = throttle - direction;
-        float arm = -gamepad2.left_stick_y;
-		float up =gamepad2.right_stick_y;
-
 		// clip the right/left values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
-        arm = Range.clip(arm, -1, 1);
-		up = Range.clip(up, -1, 1);
-
-		// scale the joystick value to make it easier to control
-		// the robot more precisely at slower speeds.
+		// scale the joystick value to make it easier to control the robot more precisely at slower speeds.
 		right = (float)scaleInput(right);
 		left =  (float)scaleInput(left);
-        arm = (float)scaleInput(arm);
-
 		// write the values to the motors
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
 		motorfRight.setPower(right);
 		motorfLeft.setPower(left);
-		hook .setPower(up);
-
-        if (gamepad2.dpad_up){
-            armMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-        if (gamepad2.dpad_down){
-            armMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-        // update the position of the rZip.
-        if (gamepad2.a) {
-            float adelta = 20000 - armMotor.getCurrentPosition();
-            if (Math.abs(adelta)>50){
-                armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
-            else {armMotor.setPower(0);}}				//+/-10 tick deadband
-        else if (gamepad2.b) {
-            float bdelta = 10000 - armMotor.getCurrentPosition();
-            if (Math.abs(bdelta)>50){
-                armMotor.setPower(controlOut(bdelta));}
-            else {armMotor.setPower(0);}}
-        else
-        {armMotor.setPower(arm);}
-
+		//****************************Zip Line*************************
+		//todo change a to LB
 		if (gamepad1.a) {
 			// if the A button is pushed on gamepad1, increment the position of
 			// the arm servo.
 			zipPosition = 0.95;
 		}
-
+		//todo change y to RB
 		if (gamepad1.y) {
 			// if the Y button is pushed on gamepad1, decrease the position of
 			// the arm servo.
 			zipPosition = 0;
 		}
-
 		lzip.setPosition(zipPosition);
 
-		/*
-		 * Send telemetry data back to driver station. Note that if we are using
-		 * a legacy NXT-compatible motor controller, then the getPower() method
-		 * will return a null value. The legacy NXT-compatible motor controllers
-		 * are currently write only.
-		 */
+
+
+		//GAMEPAD2
+		if (gamepad2.dpad_left) {
+			up = gamepad2.right_stick_y;
+		}
+		else {
+			arm = -gamepad2.right_stick_y;
+		}
+		arm = Range.clip(arm, -1, 1);
+		up = Range.clip(up, -1, 1);
+
+		//****************************Encoder Reset*************************
+		if (gamepad2.dpad_up){
+            armMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        }
+        if (gamepad2.dpad_down){
+            armMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+		//****************************Arm Control*************************
+		if (gamepad2.a) {
+            float adelta = 20000 - armMotor.getCurrentPosition();  //high bar position
+            if (Math.abs(adelta)>50){
+                armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
+            else {armMotor.setPower(0);}}				//+/-10 tick deadband
+        else if (gamepad2.b) {
+            float bdelta = 10000 - armMotor.getCurrentPosition();  //drive position
+            if (Math.abs(bdelta)>50){
+                armMotor.setPower(controlOut(bdelta));}
+            else {armMotor.setPower(0);}}
+        else
+        {armMotor.setPower(arm);}	// manual control
+
+		//****************************Hook Control*************************
+		if (gamepad2.x) {
+			float adelta = -5000 - hook.getCurrentPosition();  //hook out
+			if (Math.abs(adelta)>50){
+				hook.setPower(controlOut(adelta));}	//Call Proportional Control Method
+			else {hook.setPower(0);}}				//+/-10 tick deadband
+		else if (gamepad2.y) {
+			float bdelta = -1000 - hook.getCurrentPosition();  //hook in
+			if (Math.abs(bdelta)>50){
+				hook.setPower(controlOut(bdelta));}
+			else {hook.setPower(0);}}  // manual control
+		else
+		{hook.setPower(up);}
+
 
        // telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
        // telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+		telemetry.addData("hook", hook.getCurrentPosition() );
 		telemetry.addData("arm", armMotor.getCurrentPosition() );
 
 	}
