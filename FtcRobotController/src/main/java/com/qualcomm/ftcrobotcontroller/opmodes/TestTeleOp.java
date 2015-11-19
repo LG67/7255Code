@@ -60,11 +60,16 @@ public class TestTeleOp extends OpMode {
 	DcMotor motorfRight;
 	DcMotor motorfLeft;
 	DcMotor hook;
+	DcMotor lwheelie;
+	DcMotor rwheelie;
 	Servo rzip;
 	Servo lzip;
-	double zipPosition;
+
+	double lzipPosition=0;
+	double rzipPosition=.95;
 	float up;
 	float arm;
+
 	/**
 	 * Constructor
 	 */
@@ -94,9 +99,11 @@ public class TestTeleOp extends OpMode {
 		hook = hardwareMap.dcMotor.get("hook");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
+//		rwheelie = hardwareMap.dcMotor.get("rwheelie");
+//		lwheelie = hardwareMap.dcMotor.get("lwheelie");
 
 		lzip.setPosition(0);
-		rzip.setPosition(0);
+		rzip.setPosition(.95);
 
 
 	}
@@ -112,7 +119,7 @@ public class TestTeleOp extends OpMode {
 		//GAMEPAD1
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and 1 is full down
 		// direction: left_stick_x ranges from -1 to 1, where -1 is full left and 1 is full right
-		float throttle = gamepad1.left_stick_y;
+		float throttle = -gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
 		float right = throttle + direction;
 		float left = throttle - direction;
@@ -128,25 +135,26 @@ public class TestTeleOp extends OpMode {
 		motorfRight.setPower(right);
 		motorfLeft.setPower(left);
 		//****************************Zip Line*************************
-		//todo change a to LB
-		if (gamepad1.a) {
-			// if the A button is pushed on gamepad1, increment the position of
-			// the arm servo.
-			zipPosition = 0.95;
+		if (gamepad1.left_bumper) {
+			// if the left bumper is pushed on gamepad1, increment the position of
+			// the zip servo.
+			lzipPosition = 0;
+			rzipPosition = 0.95;
 		}
-		//todo change y to RB
-		if (gamepad1.y) {
-			// if the Y button is pushed on gamepad1, decrease the position of
-			// the arm servo.
-			zipPosition = 0;
+		if (gamepad1.right_bumper) {
+			// if the right bumper is pushed on gamepad1, decrease the position of
+			// the zip servo.
+			lzipPosition = 0.95;
+			rzipPosition = 0;
 		}
-		lzip.setPosition(zipPosition);
+		lzip.setPosition(lzipPosition);
+		rzip.setPosition(rzipPosition);
 
 
 
 		//GAMEPAD2
 		if (gamepad2.dpad_left) {
-			up = gamepad2.right_stick_y;
+			up = -gamepad2.right_stick_y;
 		}
 		else {
 			arm = -gamepad2.right_stick_y;
@@ -177,12 +185,12 @@ public class TestTeleOp extends OpMode {
 
 		//****************************Hook Control*************************
 		if (gamepad2.x) {
-			float adelta = -5000 - hook.getCurrentPosition();  //hook out
+			float adelta = 1533 - hook.getCurrentPosition();  //hook out
 			if (Math.abs(adelta)>50){
 				hook.setPower(controlOut(adelta));}	//Call Proportional Control Method
 			else {hook.setPower(0);}}				//+/-10 tick deadband
 		else if (gamepad2.y) {
-			float bdelta = -1000 - hook.getCurrentPosition();  //hook in
+			float bdelta = 5000 - hook.getCurrentPosition();  //hook in
 			if (Math.abs(bdelta)>50){
 				hook.setPower(controlOut(bdelta));}
 			else {hook.setPower(0);}}  // manual control
