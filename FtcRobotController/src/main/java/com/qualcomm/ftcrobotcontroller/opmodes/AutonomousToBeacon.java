@@ -87,8 +87,8 @@ public class AutonomousToBeacon extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot..
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot..
 		 *   
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the rZip joint of the manipulator.
@@ -132,7 +132,7 @@ public class AutonomousToBeacon extends OpMode {
 		double distance = 0.40538*sonic-1.17;
 
 		if (distance > 8) {
-						// we need to move to the left
+						// we need to move to the right
 			left = 0.96;
 			right = 0.13;
 
@@ -160,8 +160,8 @@ public class AutonomousToBeacon extends OpMode {
 
 		telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("elapsed time ", Double.toString(this.time));
-		telemetry.addData("left pwr ", Double.toString(left));
-		telemetry.addData("right pwr", Double.toString(right));
+		telemetry.addData("right pwr ", Double.toString(left));
+		telemetry.addData("left pwr", Double.toString(right));
 	}
 
 	/*

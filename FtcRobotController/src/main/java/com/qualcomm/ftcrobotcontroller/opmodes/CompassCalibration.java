@@ -60,8 +60,8 @@ public class CompassCalibration extends OpMode {
   @Override
   public void init() {
     compass = hardwareMap.compassSensor.get("compass");
-    motorRight = hardwareMap.dcMotor.get("right");
-    motorLeft = hardwareMap.dcMotor.get("left");
+    motorRight = hardwareMap.dcMotor.get("left");
+    motorLeft = hardwareMap.dcMotor.get("right");
   }
 
   @Override

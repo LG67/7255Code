@@ -53,16 +53,19 @@ public class GraceAutonomous extends OpMode {
 	DcMotor frontLeft;
 	DcMotor backRight;
 	DcMotor backLeft;
+	DcMotor armMotor;
+	DcMotor hook;
 	Servo lzip;
 	Servo rzip;
 	UltrasonicSensor uSonic;
 	double t = 0;  //Takes a snapshot of the time on loop 0
 	double timer = 0;  //Time that we're on the loop
 
-	double left = 0.0;
 	double right = 0.0;
+	double left = 0.0;
 	double zipPosition;
 	int step;
+	int instep;
 
 	/**
 	 * Constructor
@@ -90,6 +93,8 @@ public class GraceAutonomous extends OpMode {
 		backRight = hardwareMap.dcMotor.get("rdriveb");
 		backLeft = hardwareMap.dcMotor.get("ldriveb");
 		backLeft.setDirection(DcMotor.Direction.REVERSE);
+		armMotor = hardwareMap.dcMotor.get("arm");
+		hook = hardwareMap.dcMotor.get("hook");
 		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
@@ -97,6 +102,7 @@ public class GraceAutonomous extends OpMode {
 		// assign the starting position of the rZip and lZip
 		zipPosition = 0.2;
 		step = 0;  //begin case structure
+		instep = 0;
 
 	}
 
@@ -114,9 +120,9 @@ public class GraceAutonomous extends OpMode {
 				double sonic = uSonic.getUltrasonicLevel();
 				double distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
-				if (distance > 8) {
-					left = -0.13;
-					right = -0.96;
+				if (distance > 10) {
+					right = 1.0;
+					left = 0.077;
 					telemetry.addData("case", step);
 					break;
 				}
@@ -131,23 +137,61 @@ public class GraceAutonomous extends OpMode {
 				break;
 
 			case 2:  //case 2 is going to display the time
-				right = 0;
 				left = 0;
+				right = 0;
 			if (timer <= 7 ) {
+				switch (instep) {
+					case 0:
+						if (armMotor.getCurrentPosition() <= 15000)
+						{
+							armMotor.setPower(0.7);
+							break;
+					}
+					else {
+							armMotor.setPower(0);
+							instep++;
+							break;
+						}
+					case 1:
+						//Todo open hook farther
+						if (hook.getCurrentPosition() <= 1000)
+						{
+							hook.setPower(0.7);
+							break;
+						}
+						else {
+							hook.setPower(0);
+							instep++;
+							break;
+						}
+					case 2:
+						if (armMotor.getCurrentPosition() >= 1000)
+						{
+							armMotor.setPower(-0.7);
+							break;
+						}
+						else {
+							armMotor.setPower(0);
+							instep++;
+							break;
+						}
+
+				}
+
 				telemetry.addData("time ", timer);
-				telemetry.addData("case", step);
 				break;
 			}
 			else {
 				step++;
 				break;
 			}
-			case 3:  //case 2 is going to display the time
-				right = 0;
+			case 3:  //turn toward mountain
+				//Todo make turn a little greater
 				left = 0;
-				if (timer >= 7 && timer<15) {
-					left = 0.1;
+				right = 0;
+				if (timer >= 7 && timer< 9.) {
 					right = 1.0;
+					left = -1.0;
 
 					telemetry.addData("time ", timer);
 					telemetry.addData("case", step);
@@ -158,13 +202,40 @@ public class GraceAutonomous extends OpMode {
 					break;
 				}
 
-			case 4:  //case 2 is going to display the time
-				right = 0;
+			case 4:  //go forward
 				left = 0;
-				if (timer >= 15 && timer<30) {
-					left = 0.0;
-					right = 0.00;
-
+				right = 0;
+				if (timer >= 9. && timer< 11.5) {
+					right = 1.0;
+					left = 1.0;
+					telemetry.addData("time ", timer);
+					telemetry.addData("case", step);
+					break;
+				}
+				else {
+					step++;
+					break;
+				}
+			case 5:  //turn toward mountain
+				left = 0;
+				right = 0;
+				if (timer >= 11.5 && timer< 13.5) {
+					right = -1.0;
+					left = 1.0;
+					telemetry.addData("time ", timer);
+					telemetry.addData("case", step);
+					break;
+				}
+				else {
+					step++;
+					break;
+				}
+			case 6:  //go forward up mountain
+				left = 0;
+				right = 0;
+				if (timer >= 13.5 && timer< 15.5) {
+					right = 1.0;
+					left = 1.0;
 					telemetry.addData("time ", timer);
 					telemetry.addData("case", step);
 					break;
@@ -178,14 +249,18 @@ public class GraceAutonomous extends OpMode {
 				frontLeft.setPower(0);
 				backRight.setPower(0);
 				backLeft.setPower(0);
+				armMotor.setPower(0);
+				hook.setPower(0);
 				step++;
 				break;
+
+
 		}
 
-		frontRight.setPower(right);
-		frontLeft.setPower(left);
-		backRight.setPower(right);
-		backLeft.setPower(left);
+		frontRight.setPower(left);
+		frontLeft.setPower(right);
+		backRight.setPower(left);
+		backLeft.setPower(right);
 
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
@@ -195,8 +270,8 @@ public class GraceAutonomous extends OpMode {
 		 */
 
         telemetry.addData("system time ", this.time);
-		telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
-		telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", right));
+		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", left));
 		}
 
 

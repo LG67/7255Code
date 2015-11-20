@@ -94,8 +94,8 @@ public class K9TankDrive extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot.
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot.
 		 *
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the arm joint of the manipulator.
@@ -124,7 +124,7 @@ public class K9TankDrive extends OpMode {
 		/*
 		 * Gamepad 1
 		 *
-		 * Gamepad 1 controls the motors via the left stick, and it controls the
+		 * Gamepad 1 controls the motors via the right stick, and it controls the
 		 * wrist/claw via the a,b, x, y buttons
 		 */
 
@@ -133,7 +133,7 @@ public class K9TankDrive extends OpMode {
         float left = -gamepad1.left_stick_y;
         float right = -gamepad1.right_stick_y;
 
-		// clip the right/left values so that the values never exceed +/- 1
+		// clip the left/right values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
 
@@ -199,8 +199,8 @@ public class K9TankDrive extends OpMode {
 		telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("arm", "arm:  " + String.format("%.2f", armPosition));
         telemetry.addData("claw", "claw:  " + String.format("%.2f", clawPosition));
-		telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
-		telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", left));
+		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", right));
 	}
 
 	/*

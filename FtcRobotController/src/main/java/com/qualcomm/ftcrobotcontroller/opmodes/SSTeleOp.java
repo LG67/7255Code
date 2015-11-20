@@ -96,8 +96,8 @@ public class SSTeleOp extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot and reversed.
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot and reversed.
 		 *   
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the rZip joint of the manipulator.
@@ -131,20 +131,20 @@ public class SSTeleOp extends OpMode {
 		/*
 		 * Gamepad 1
 		 * 
-		 * Gamepad 1 controls the motors via the left stick, and it controls the
+		 * Gamepad 1 controls the motors via the right stick, and it controls the
 		 * wrist/lZip via the a,b, x, y buttons
 		 */
 
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
 		// 1 is full down
-		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
-		// and 1 is full right
+		// direction: left_stick_x ranges from -1 to 1, where -1 is full right
+		// and 1 is full left
 		float throttle = -gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
 		float right = throttle - direction;
 		float left = throttle + direction;
 
-		// clip the right/left values so that the values never exceed +/- 1
+		// clip the left/right values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
 
@@ -202,8 +202,8 @@ public class SSTeleOp extends OpMode {
         telemetry.addData("Text", "*** Robot Data***");
        // telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
        // telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
-        telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
-        telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+        telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", left));
+        telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", right));
 
 	}
 

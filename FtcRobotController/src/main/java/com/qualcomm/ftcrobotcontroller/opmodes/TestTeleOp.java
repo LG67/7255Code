@@ -118,12 +118,12 @@ public class TestTeleOp extends OpMode {
 
 		//GAMEPAD1
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and 1 is full down
-		// direction: left_stick_x ranges from -1 to 1, where -1 is full left and 1 is full right
+		// direction: left_stick_x ranges from -1 to 1, where -1 is full right and 1 is full left
 		float throttle = -gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
 		float right = throttle + direction;
 		float left = throttle - direction;
-		// clip the right/left values so that the values never exceed +/- 1
+		// clip the left/right values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
 		// scale the joystick value to make it easier to control the robot more precisely at slower speeds.
@@ -136,13 +136,13 @@ public class TestTeleOp extends OpMode {
 		motorfLeft.setPower(left);
 		//****************************Zip Line*************************
 		if (gamepad1.left_bumper) {
-			// if the left bumper is pushed on gamepad1, increment the position of
+			// if the right bumper is pushed on gamepad1, increment the position of
 			// the zip servo.
 			lzipPosition = 0;
 			rzipPosition = 0.95;
 		}
 		if (gamepad1.right_bumper) {
-			// if the right bumper is pushed on gamepad1, decrease the position of
+			// if the left bumper is pushed on gamepad1, decrease the position of
 			// the zip servo.
 			lzipPosition = 0.95;
 			rzipPosition = 0;
@@ -200,8 +200,8 @@ public class TestTeleOp extends OpMode {
 
        // telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
        // telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
-        telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
-        telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+        telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", left));
+        telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", right));
 		telemetry.addData("hook", hook.getCurrentPosition() );
 		telemetry.addData("arm", armMotor.getCurrentPosition() );
 

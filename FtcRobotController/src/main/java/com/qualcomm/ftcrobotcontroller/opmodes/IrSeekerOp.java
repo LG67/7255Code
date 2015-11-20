@@ -83,11 +83,11 @@ public class IrSeekerOp extends OpMode {
 
       // which direction should we move?
       if (angle < -20) {
-        // we need to move to the left
+        // we need to move to the right
         motorRight.setPower(MOTOR_POWER);
         motorLeft.setPower(-MOTOR_POWER);
       } else if (angle > 20) {
-        // we need to move to the right
+        // we need to move to the left
         motorRight.setPower(-MOTOR_POWER);
         motorLeft.setPower(MOTOR_POWER);
       } else if (strength < HOLD_IR_SIGNAL_STRENGTH) {

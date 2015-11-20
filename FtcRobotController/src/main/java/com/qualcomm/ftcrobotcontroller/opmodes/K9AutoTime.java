@@ -85,8 +85,8 @@ public class K9AutoTime extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot..
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot..
 		 *   
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the rZip joint of the manipulator.
@@ -137,7 +137,7 @@ public class K9AutoTime extends OpMode {
             left = 0.15;
             right = 0.15;
         } else if (this.time > 5 && this.time <= 8.5) {
-            // between 5 and 8.5 seconds, point turn right.
+            // between 5 and 8.5 seconds, point turn left.
             left = 0.15;
             right = -0.15;
         } else if (this.time > 8.5 && this.time <= 15) {
@@ -145,7 +145,7 @@ public class K9AutoTime extends OpMode {
             left = 0.0;
             right = 0.0;
         } else if (this.time > 15d && this.time <= 20.75d) {
-            // between 15 and 20.75 seconds, point turn left.
+            // between 15 and 20.75 seconds, point turn right.
             left = -0.15;
             right = 0.15;
         } else {
@@ -175,8 +175,8 @@ public class K9AutoTime extends OpMode {
 		telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("time", "elapsed time: " + Double.toString(this.time));
         telemetry.addData("reflection", "reflection:  " + Double.toString(reflection));
-		telemetry.addData("left tgt pwr",  "left  pwr: " + Double.toString(left));
-		telemetry.addData("right tgt pwr", "right pwr: " + Double.toString(right));
+		telemetry.addData("right tgt pwr",  "right  pwr: " + Double.toString(left));
+		telemetry.addData("left tgt pwr", "left pwr: " + Double.toString(right));
 	}
 
 	/*

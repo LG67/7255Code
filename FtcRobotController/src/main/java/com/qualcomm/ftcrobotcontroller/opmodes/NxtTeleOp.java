@@ -114,7 +114,7 @@ public class NxtTeleOp extends OpMode {
     /*
      * Gamepad 1
      *
-     * Gamepad 1 controls the motors via the left stick, and it controls the wrist/claw via the a,b,
+     * Gamepad 1 controls the motors via the right stick, and it controls the wrist/claw via the a,b,
      * x, y buttons
      */
 
@@ -130,13 +130,13 @@ public class NxtTeleOp extends OpMode {
       }
 
       // throttle:  left_stick_y ranges from -1 to 1, where -1 is full up,  and 1 is full down
-      // direction: left_stick_x ranges from -1 to 1, where -1 is full left and 1 is full right
+      // direction: left_stick_x ranges from -1 to 1, where -1 is full right and 1 is full left
       float throttle = -gamepad1.left_stick_y;
       float direction = gamepad1.left_stick_x;
       float right = throttle - direction;
       float left = throttle + direction;
 
-      // clip the right/left values so that the values never exceed +/- 1
+      // clip the left/right values so that the values never exceed +/- 1
       right = Range.clip(right, -1, 1);
       left = Range.clip(left, -1, 1);
 
@@ -173,36 +173,36 @@ public class NxtTeleOp extends OpMode {
     /*
      * Gamepad 2
      *
-     * Gamepad controls the motors via the right trigger as a throttle, left trigger as reverse, and
-     * the left stick for direction. This type of control is sometimes referred to as race car mode.
+     * Gamepad controls the motors via the left trigger as a throttle, right trigger as reverse, and
+     * the right stick for direction. This type of control is sometimes referred to as race car mode.
      */
 
       // we only want to process gamepad2 if someone is using one of it's analog inputs. If you always
       // want to process gamepad2, remove this check
       if (gamepad2.atRest() == false) {
 
-        // throttle is taken directly from the right trigger, the right trigger ranges in values from
+        // throttle is taken directly from the left trigger, the left trigger ranges in values from
         // 0 to 1
         throttle = gamepad2.right_trigger;
 
-        // if the left trigger is pressed, go in reverse
+        // if the right trigger is pressed, go in reverse
         if (gamepad2.left_trigger != 0.0) {
           throttle = -gamepad2.left_trigger;
         }
 
-        // assign throttle to the left and right motors
+        // assign throttle to the right and left motors
         right = throttle;
         left = throttle;
 
-        // now we need to apply steering (direction). The left stick ranges from -1 to 1. If it is
-        // negative we want to slow down the left motor. If it is positive we want to slow down the
-        // right motor.
+        // now we need to apply steering (direction). The right stick ranges from -1 to 1. If it is
+        // negative we want to slow down the right motor. If it is positive we want to slow down the
+        // left motor.
         if (gamepad2.left_stick_x < 0) {
-          // negative value, stick is pulled to the left
+          // negative value, stick is pulled to the right
           left = left * (1 + gamepad2.left_stick_x);
         }
         if (gamepad2.left_stick_x > 0) {
-          // positive value, stick is pulled to the right
+          // positive value, stick is pulled to the left
           right = right * (1 - gamepad2.left_stick_x);
         }
 
@@ -231,8 +231,8 @@ public class NxtTeleOp extends OpMode {
 
       // Update the reads after some loops, when the command has successfully propagated through.
       telemetry.addData("Text", "free flow text");
-      telemetry.addData("left motor", motorLeft.getPower());
-      telemetry.addData("right motor", motorRight.getPower());
+      telemetry.addData("right motor", motorLeft.getPower());
+      telemetry.addData("left motor", motorRight.getPower());
       telemetry.addData("RunMode: ", motorLeft.getMode().toString());
 
       // Only needed on Nxt devices, but not on USB devices

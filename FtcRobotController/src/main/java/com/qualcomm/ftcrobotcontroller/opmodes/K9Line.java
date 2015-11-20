@@ -80,8 +80,8 @@ public class K9Line extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot..
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot..
 		 *
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the arm joint of the manipulator.
@@ -139,14 +139,14 @@ public class K9Line extends OpMode {
 		if (reflection < LIGHT_THRESHOLD) {
 			/*
 			 * if reflection is less than the threshold value, then assume we are above dark spot.
-			 * turn to the right.
+			 * turn to the left.
 			 */
 			left = MOTOR_POWER;
 			right = 0.0;
 		} else {
 			/*
 			 * assume we are over a light spot.
-			 * turn to the left.
+			 * turn to the right.
 			 */
 			left = 0.0;
 			right = MOTOR_POWER;
@@ -167,8 +167,8 @@ public class K9Line extends OpMode {
 
 		telemetry.addData("Text", "*** Robot Data***");
 		telemetry.addData("reflection", "reflection:  " + Double.toString(reflection));
-		telemetry.addData("left tgt pwr",  "left  pwr: " + Double.toString(left));
-		telemetry.addData("right tgt pwr", "right pwr: " + Double.toString(right));
+		telemetry.addData("right tgt pwr",  "right  pwr: " + Double.toString(left));
+		telemetry.addData("left tgt pwr", "left pwr: " + Double.toString(right));
 	}
 
 	/*

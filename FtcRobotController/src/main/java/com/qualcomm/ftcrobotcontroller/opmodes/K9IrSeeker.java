@@ -79,8 +79,8 @@ public class K9IrSeeker extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot.
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot.
 		 *
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the arm joint of the manipulator.
@@ -130,30 +130,30 @@ public class K9IrSeeker extends OpMode {
 			/*
 			 * Get angle and strength of the signal.
 			 * Note an angle of zero implies straight ahead.
-			 * A negative angle implies that the source is to the left.
-			 * A positive angle implies that the source is to the right.
+			 * A negative angle implies that the source is to the right.
+			 * A positive angle implies that the source is to the left.
 			 */
 			angle = irSeeker.getAngle();
 			strength = irSeeker.getStrength();
 
             if (angle < -60)  {
                 /*
-                 * IR source is to the way left.
-                 * Point turn to the left.
+                 * IR source is to the way right.
+                 * Point turn to the right.
                  */
                 left = -MOTOR_POWER;
                 right = MOTOR_POWER;
 
             } else if (angle < -5) {
-                // turn to the left and move forward.
+                // turn to the right and move forward.
                 left = MOTOR_POWER - 0.05;
                 right = MOTOR_POWER;
             } else if (angle > 5 && angle < 60) {
-                // turn to the right and move forward.
+                // turn to the left and move forward.
                 left = MOTOR_POWER;
                 right = MOTOR_POWER - 0.05;
             } else if (angle > 60) {
-                // point turn to right.
+                // point turn to left.
                 left = MOTOR_POWER;
                 right = -MOTOR_POWER;
             } else if (strength < HOLD_IR_SIGNAL_STRENGTH) {
@@ -196,8 +196,8 @@ public class K9IrSeeker extends OpMode {
 		telemetry.addData("Text", "*** Robot Data***");
 		telemetry.addData("angle", "angle:  " + Double.toString(angle));
 		telemetry.addData("strength", "sig strength: " + Double.toString(strength));
-		telemetry.addData("left tgt pwr",  "left  pwr: " + Double.toString(left));
-		telemetry.addData("right tgt pwr", "right pwr: " + Double.toString(right));
+		telemetry.addData("right tgt pwr",  "right  pwr: " + Double.toString(left));
+		telemetry.addData("left tgt pwr", "left pwr: " + Double.toString(right));
 	}
 
 	/*

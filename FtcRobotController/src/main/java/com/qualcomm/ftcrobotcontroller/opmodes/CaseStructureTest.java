@@ -57,8 +57,8 @@ public class CaseStructureTest extends OpMode {
 //	Servo lZip;
 //	Servo rZip;
 
-	//	double left = 0.0;
-//	double right = 0.0;
+	//	double right = 0.0;
+//	double left = 0.0;
 	double t = 0, x=0;
 	double tLoop = 0, tNew = 0;
 	int loop = 0, step = 0;
@@ -88,8 +88,8 @@ public class CaseStructureTest extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot..
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot..
 		 *   
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the rZip joint of the manipulator.

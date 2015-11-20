@@ -76,7 +76,7 @@ public class LegacySensorOp extends OpMode {
 //    double angle = gyro.getRotation();
 /*
       if (distance > 5) {
-        // we need to move to the left
+        // we need to move to the right
         motorRight.setPower(MOTOR_POWER);
         motorLeft.setPower(-MOTOR_POWER);
       }  else {

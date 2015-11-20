@@ -67,11 +67,11 @@ public class LinearIrExample extends LinearOpMode {
     }
 
     if (irSeeker.getAngle() < 0) {
-      // if the signal is to the left move left
+      // if the signal is to the right move right
       motorRight.setPower(MOTOR_POWER);
       motorLeft.setPower(-MOTOR_POWER);
     } else if (irSeeker.getAngle() > 0) {
-      // if the signal is to the right move right
+      // if the signal is to the left move left
       motorRight.setPower(-MOTOR_POWER);
       motorLeft.setPower(MOTOR_POWER);
     }

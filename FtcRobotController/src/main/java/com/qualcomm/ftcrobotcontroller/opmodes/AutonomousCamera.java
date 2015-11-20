@@ -290,8 +290,8 @@ public class AutonomousCamera extends OpMode {
 		 */
 
         telemetry.addData("system time ", this.time);
-		telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
-		telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", left));
+		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", right));
 		}
 
 

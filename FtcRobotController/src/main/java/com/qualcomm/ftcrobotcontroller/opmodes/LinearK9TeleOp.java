@@ -73,13 +73,13 @@ public class LinearK9TeleOp extends LinearOpMode {
 
     while (opModeIsActive()) {
       // throttle:  left_stick_y ranges from -1 to 1, where -1 is full up,  and 1 is full down
-      // direction: left_stick_x ranges from -1 to 1, where -1 is full left and 1 is full right
+      // direction: left_stick_x ranges from -1 to 1, where -1 is full right and 1 is full left
       float throttle  = -gamepad1.left_stick_y;
       float direction =  gamepad1.left_stick_x;
       float right = throttle - direction;
       float left  = throttle + direction;
 
-      // clip the right/left values so that the values never exceed +/- 1
+      // clip the left/right values so that the values never exceed +/- 1
       right = Range.clip(right, -1, 1);
       left  = Range.clip(left,  -1, 1);
 
@@ -107,8 +107,8 @@ public class LinearK9TeleOp extends LinearOpMode {
       jaw.setPosition(jawPosition);
 
       telemetry.addData("Text", "K9TeleOp");
-      telemetry.addData(" left motor", motorLeft.getPower());
-      telemetry.addData("right motor", motorRight.getPower());
+      telemetry.addData(" right motor", motorLeft.getPower());
+      telemetry.addData("left motor", motorRight.getPower());
       telemetry.addData("neck", neck.getPosition());
       telemetry.addData("jaw", jaw.getPosition());
 
