@@ -99,8 +99,8 @@ public class TestTeleOp extends OpMode {
 		hook = hardwareMap.dcMotor.get("hook");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
-//		rwheelie = hardwareMap.dcMotor.get("rwheelie");
-//		lwheelie = hardwareMap.dcMotor.get("lwheelie");
+		rwheelie = hardwareMap.dcMotor.get("rwheelie");
+		lwheelie = hardwareMap.dcMotor.get("lwheelie");
 
 		lzip.setPosition(0);
 		rzip.setPosition(.95);
@@ -144,8 +144,8 @@ public class TestTeleOp extends OpMode {
 		if (gamepad1.right_bumper) {
 			// if the left bumper is pushed on gamepad1, decrease the position of
 			// the zip servo.
-			lzipPosition = 0.95;
-			rzipPosition = 0;
+			lzipPosition = 0.5;
+			rzipPosition = 0.5;
 		}
 		lzip.setPosition(lzipPosition);
 		rzip.setPosition(rzipPosition);
@@ -197,6 +197,32 @@ public class TestTeleOp extends OpMode {
 		else
 		{hook.setPower(up);}
 
+		//****************************Wheelie Bar**************************//
+		if (gamepad2.left_bumper) {
+			float wdelta = 0 - lwheelie.getCurrentPosition();  //left wheeliebar up
+			if (Math.abs(wdelta)>50){
+				lwheelie.setPower(controlOut(wdelta));
+				rwheelie.setPower(controlOut(wdelta));
+			}	//Call Proportional Control Method
+			else {lwheelie.setPower(0);
+				rwheelie.setPower(0);
+
+			}}				//+/-10 tick deadband
+		else if (gamepad2.right_bumper) {
+			float wdelta = 100 - lwheelie.getCurrentPosition();
+			if (Math.abs(wdelta) > 50) {
+				lwheelie.setPower(controlOut(wdelta));
+				rwheelie.setPower(controlOut(wdelta));
+			} else {
+				lwheelie.setPower(0);
+				rwheelie.setPower(0);
+			}
+		}
+
+
+			else {lwheelie.setPower(0);
+				rwheelie.setPower(0);}  // manual control
+
 
        // telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
        // telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
@@ -213,20 +239,19 @@ public class TestTeleOp extends OpMode {
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#stop()
 	 */
 	@Override
-	public void stop() {
+	public void stop(){
+		}
 
-	}
 
-    	
 	/*
-	 * This method scales the joystick input so for low joystick values, the 
+	 * This method scales the joystick input so for low joystick values, the
 	 * scaled value is less than linear.  This is to make it easier to drive
 	 * the robot more precisely at slower speeds.
 	 */
 	double scaleInput(double dVal)  {
 		double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
 				0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
-		
+
 		// get the corresponding index for the scaleInput array.
 		int index = (int) (dVal * 16.0);
 		

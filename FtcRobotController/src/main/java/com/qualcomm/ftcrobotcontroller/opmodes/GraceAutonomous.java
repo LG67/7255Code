@@ -122,7 +122,7 @@ public class GraceAutonomous extends OpMode {
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
 				if (distance > 10) {
 					right = 1.0;
-					left = 0.077;
+					left = 0.079;
 					telemetry.addData("case", step);
 					break;
 				}
@@ -139,9 +139,10 @@ public class GraceAutonomous extends OpMode {
 			case 2:  //case 2 is going to display the time
 				left = 0;
 				right = 0;
-			if (timer <= 7 ) {
+			if (timer <= 10 ) {
 				switch (instep) {
 					case 0:
+						//todo make arm go a little farther
 						if (armMotor.getCurrentPosition() <= 15000)
 						{
 							armMotor.setPower(0.7);
@@ -153,8 +154,7 @@ public class GraceAutonomous extends OpMode {
 							break;
 						}
 					case 1:
-						//Todo open hook farther
-						if (hook.getCurrentPosition() <= 1000)
+						if (hook.getCurrentPosition() <= 1500)
 						{
 							hook.setPower(0.7);
 							break;
@@ -186,10 +186,10 @@ public class GraceAutonomous extends OpMode {
 				break;
 			}
 			case 3:  //turn toward mountain
-				//Todo make turn a little greater
 				left = 0;
 				right = 0;
-				if (timer >= 7 && timer< 9.) {
+				armMotor.setPower(0);
+				if (timer >= 10 && timer< 12.3) {
 					right = 1.0;
 					left = -1.0;
 
@@ -205,7 +205,7 @@ public class GraceAutonomous extends OpMode {
 			case 4:  //go forward
 				left = 0;
 				right = 0;
-				if (timer >= 9. && timer< 11.5) {
+				if (timer >= 12.3 && timer< 14) {
 					right = 1.0;
 					left = 1.0;
 					telemetry.addData("time ", timer);
@@ -216,10 +216,11 @@ public class GraceAutonomous extends OpMode {
 					step++;
 					break;
 				}
+				//todo make turn a little less
 			case 5:  //turn toward mountain
 				left = 0;
 				right = 0;
-				if (timer >= 11.5 && timer< 13.5) {
+				if (timer >= 14 && timer< 16) {
 					right = -1.0;
 					left = 1.0;
 					telemetry.addData("time ", timer);
@@ -233,7 +234,7 @@ public class GraceAutonomous extends OpMode {
 			case 6:  //go forward up mountain
 				left = 0;
 				right = 0;
-				if (timer >= 13.5 && timer< 15.5) {
+				if (timer >= 16 && timer< 18) {
 					right = 1.0;
 					left = 1.0;
 					telemetry.addData("time ", timer);
