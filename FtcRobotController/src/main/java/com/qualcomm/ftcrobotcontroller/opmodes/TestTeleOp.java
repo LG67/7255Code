@@ -65,8 +65,8 @@ public class TestTeleOp extends OpMode {
 	Servo rzip;
 	Servo lzip;
 
-	double lzipPosition=0;
-	double rzipPosition=.95;
+	double lzipPosition=0.95;
+	double rzipPosition=0.0;
 	float up;
 	float arm;
 
@@ -102,8 +102,8 @@ public class TestTeleOp extends OpMode {
 		rwheelie = hardwareMap.dcMotor.get("rwheelie");
 		lwheelie = hardwareMap.dcMotor.get("lwheelie");
 
-		lzip.setPosition(0);
-		rzip.setPosition(.95);
+		lzip.setPosition(.95);
+		rzip.setPosition(.0);
 
 
 	}
@@ -138,8 +138,8 @@ public class TestTeleOp extends OpMode {
 		if (gamepad1.left_bumper) {
 			// if the right bumper is pushed on gamepad1, increment the position of
 			// the zip servo.
-			lzipPosition = 0;
-			rzipPosition = 0.95;
+			lzipPosition = 0.95;
+			rzipPosition = 0;
 		}
 		if (gamepad1.right_bumper) {
 			// if the left bumper is pushed on gamepad1, decrease the position of
@@ -197,37 +197,44 @@ public class TestTeleOp extends OpMode {
 		else
 		{hook.setPower(up);}
 
-		//****************************Wheelie Bar**************************//
+		//*****************************Wheelie Bar**************************
 		if (gamepad2.left_bumper) {
-			float wdelta = 0 - lwheelie.getCurrentPosition();  //left wheeliebar up
+			float wdelta = 0 - rwheelie.getCurrentPosition();  //left wheeliebar up
 			if (Math.abs(wdelta)>50){
-				lwheelie.setPower(controlOut(wdelta));
-				rwheelie.setPower(controlOut(wdelta));
+				lwheelie.setPower(-controlOut(.0012, wdelta));
+				rwheelie.setPower(controlOut(.0012, wdelta));
 			}	//Call Proportional Control Method
 			else {lwheelie.setPower(0);
 				rwheelie.setPower(0);
-
-			}}				//+/-10 tick deadband
+			}
+		}				//+/-10 tick deadband
 		else if (gamepad2.right_bumper) {
-			float wdelta = 100 - lwheelie.getCurrentPosition();
+			float wdelta = 387 - rwheelie.getCurrentPosition();
 			if (Math.abs(wdelta) > 50) {
-				lwheelie.setPower(controlOut(wdelta));
-				rwheelie.setPower(controlOut(wdelta));
+				lwheelie.setPower(-controlOut(.0005, wdelta));
+				rwheelie.setPower(controlOut(.0005, wdelta));
 			} else {
 				lwheelie.setPower(0);
 				rwheelie.setPower(0);
 			}
 		}
-
-
-			else {lwheelie.setPower(0);
-				rwheelie.setPower(0);}  // manual control
+		else if (gamepad2.left_trigger>.1){
+			lwheelie.setPower(.25*gamepad2.left_trigger);
+			rwheelie.setPower(-.25*gamepad2.left_trigger);
+			//manual control`
+		}
+		else {
+			lwheelie.setPower(-.25*gamepad2.right_trigger);
+			rwheelie.setPower(.25*gamepad2.right_trigger);
+		}  // manual control
 
 
        // telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
        // telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
         telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", left));
         telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", right));
+		telemetry.addData("lwheelie", lwheelie.getCurrentPosition() );
+		telemetry.addData("rwheelie", rwheelie.getCurrentPosition());
 		telemetry.addData("hook", hook.getCurrentPosition() );
 		telemetry.addData("arm", armMotor.getCurrentPosition() );
 
@@ -284,9 +291,15 @@ public class TestTeleOp extends OpMode {
 	double controlOut(double delta){
 		double pOut;
 		pOut=.5*delta;
-		pOut=scaleInput(pOut);
+		pOut=Range.clip(pOut,-1,1);
 		return pOut;
 	}
 
+	double controlOut(double k, double delta){
+		double pOut;
+		pOut=k*delta;
+		pOut=Range.clip(pOut,-1,1);
+		return pOut;
+	}
 
 }
