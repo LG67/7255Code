@@ -153,20 +153,21 @@ public class TestTeleOp extends OpMode {
 
 
 		//GAMEPAD2
-		if (gamepad2.dpad_left) {
-			up = -gamepad2.right_stick_y;
-		}
-		else {
-			arm = -gamepad2.right_stick_y;
-		}
+		up = -gamepad2.right_stick_y;
+		arm = -gamepad2.left_stick_y;
+
 		arm = Range.clip(arm, -1, 1);
 		up = Range.clip(up, -1, 1);
 
 		//****************************Encoder Reset*************************
 		if (gamepad2.dpad_up){
-            armMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+            rwheelie.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         }
+		if (gamepad2.dpad_right){
+			armMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+		}
         if (gamepad2.dpad_down){
+			rwheelie.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             armMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
 		//****************************Arm Control*************************
@@ -211,8 +212,8 @@ public class TestTeleOp extends OpMode {
 		else if (gamepad2.right_bumper) {
 			float wdelta = 387 - rwheelie.getCurrentPosition();
 			if (Math.abs(wdelta) > 50) {
-				lwheelie.setPower(-controlOut(.0005, wdelta));
-				rwheelie.setPower(controlOut(.0005, wdelta));
+				lwheelie.setPower(-controlOut(.001, wdelta));
+				rwheelie.setPower(controlOut(.001, wdelta));
 			} else {
 				lwheelie.setPower(0);
 				rwheelie.setPower(0);
@@ -223,21 +224,27 @@ public class TestTeleOp extends OpMode {
 			rwheelie.setPower(-.25*gamepad2.left_trigger);
 			//manual control`
 		}
+		else if (Math.abs(gamepad2.right_trigger)>0.1 && rwheelie.getCurrentPosition()<400){
+			lwheelie.setPower(-.75*gamepad2.right_trigger);
+			rwheelie.setPower(.75*gamepad2.right_trigger);
+		}
 		else {
-			lwheelie.setPower(-.25*gamepad2.right_trigger);
-			rwheelie.setPower(.25*gamepad2.right_trigger);
-		}  // manual control
+				lwheelie.setPower(0);
+				rwheelie.setPower(0);
+		}
+
+
+
+		// manual control
 
 
        // telemetry.addData("rZip", "rZip:  " + String.format("%.2f", armPosition));
        // telemetry.addData("lZip", "lZip:  " + String.format("%.2f", clawPosition));
         telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", left));
         telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", right));
-		telemetry.addData("lwheelie", lwheelie.getCurrentPosition() );
 		telemetry.addData("rwheelie", rwheelie.getCurrentPosition());
 		telemetry.addData("hook", hook.getCurrentPosition() );
 		telemetry.addData("arm", armMotor.getCurrentPosition() );
-
 	}
 
 	/*
@@ -295,7 +302,7 @@ public class TestTeleOp extends OpMode {
 		return pOut;
 	}
 
-	double controlOut(double k, double delta){
+	double controlOut(double k, double delta){  // this method allows you to pass in a proportional constant
 		double pOut;
 		pOut=k*delta;
 		pOut=Range.clip(pOut,-1,1);
