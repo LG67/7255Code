@@ -64,6 +64,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register ("Accel", AccelZTEstOp.class);
     manager.register ("Teleop", TestTeleOp.class);
     manager.register("Grace", GraceAutonomous.class);
+    manager.register("GraceDelay", GraceAuton2.class);
 
 
     /*
