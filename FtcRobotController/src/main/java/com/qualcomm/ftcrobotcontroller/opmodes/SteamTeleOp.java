@@ -292,7 +292,7 @@ public class SteamTeleOp extends OpMode {
 	}
 
 	/*
-	 * This method provides proportional position control
+	 * This method provides proportional position control to get to arm and hook set points
 	 */
 
 	double controlOut(double delta){
@@ -301,7 +301,9 @@ public class SteamTeleOp extends OpMode {
 		pOut=Range.clip(pOut,-1,1);
 		return pOut;
 	}
-
+	/*
+         * This method provides adjustable proportional position control for the wheelie bar
+         */
 	double controlOut(double k, double delta){  // this method allows you to pass in a proportional constant
 		double pOut;
 		pOut=k*delta;

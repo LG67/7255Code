@@ -36,11 +36,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
-/**
- * TeleOp Mode
- * <p>
- * Enables control of the robot via the gamepad
- */
 public class RedAuton extends OpMode {
 
 	/*
@@ -188,7 +183,7 @@ public class RedAuton extends OpMode {
 			case 6:  //case 2 is going to display the time
 				left = 0;
 				right = 0;
-			if (timer <= 9.5 ) {
+			if (timer <= 5) {
 				switch (instep) {
 					case 0:
 						if (armMotor.getCurrentPosition() <= 10000)
@@ -209,17 +204,6 @@ public class RedAuton extends OpMode {
 						}
 						else {
 							hook.setPower(0);
-							instep++;
-							break;
-						}
-					case 2:
-						if (armMotor.getCurrentPosition() >= 0)
-						{
-							armMotor.setPower(-0.7);
-							break;
-						}
-						else {
-							armMotor.setPower(0);
 							instep++;
 							break;
 						}
