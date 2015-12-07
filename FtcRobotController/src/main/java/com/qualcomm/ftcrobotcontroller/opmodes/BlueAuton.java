@@ -36,11 +36,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
-/**
- * TeleOp Mode
- * <p>
- * Enables control of the robot via the gamepad
- */
 public class BlueAuton extends OpMode {
 
 	/*
@@ -62,7 +57,7 @@ public class BlueAuton extends OpMode {
 	UltrasonicSensor uSonic;
 	double t = 0;  //Takes a snapshot of the time on loop 0
 	double timer = 0;  //Time that we're on the loop
-
+	double distance;
 	double right = 0.0;
 	double left = 0.0;
 	double zipPosition;
@@ -121,7 +116,6 @@ public class BlueAuton extends OpMode {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
 		switch (step) {
 			case 0: //put down wheelie bar
-				//todo fix ultrasonic sensing nonexistent things
 				if (rwheelie.getCurrentPosition() < 300){
 					rwheelie.setPower(0.15);
 					lwheelie.setPower(-0.15);
@@ -133,10 +127,10 @@ public class BlueAuton extends OpMode {
 					step++;
 					break;
 				}
-			case 1:
-				if (timer<5) {
-					right = -1.0;
-					left = -0.12;
+			case 1: //****Delay lies here****
+				if (timer<0.1) {
+					right =0;
+					left = 0;
 					break;
 				}
 				else {
@@ -145,10 +139,11 @@ public class BlueAuton extends OpMode {
 				}
 			case 2:
 				double sonic = uSonic.getUltrasonicLevel();
-				double distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
+				distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
-				if (distance > 12) {
-					right = -1.0;
+				//if (distance > 12) {
+				if (timer<10) {
+					right = -1;
 					left = -0.12;
 					break;
 				}
@@ -167,8 +162,8 @@ public class BlueAuton extends OpMode {
 				right = 0;
 				armMotor.setPower(0);
 				if (timer< 3) {
-					right = 1.0;
-					left = -1.0;
+					right = -1.0;
+					left = 1.0;
 
 					telemetry.addData("time ", timer);
 					telemetry.addData("case", step);
@@ -214,8 +209,6 @@ public class BlueAuton extends OpMode {
 						}
 
 				}
-
-				telemetry.addData("time ", timer);
 				break;
 			}
 			else {
@@ -303,6 +296,7 @@ public class BlueAuton extends OpMode {
         telemetry.addData("system time ", this.time);
 		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", right));
 		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", left));
+		telemetry.addData("uSonic", distance);
 		}
 
 

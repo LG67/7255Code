@@ -34,10 +34,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 
-public class RedAuton extends OpMode {
+public class RedMtnAuton extends OpMode {
 
 	/*
 	 * Note: the configuration of the servos is such that
@@ -55,23 +54,18 @@ public class RedAuton extends OpMode {
 	DcMotor rwheelie;
 	Servo lzip;
 	Servo rzip;
-	UltrasonicSensor uSonic;
 	double t = 0;  //Takes a snapshot of the time on loop 0
 	double timer = 0;  //Time that we're on the loop
-	double distance;
 	double right = 0.0;
 	double left = 0.0;
 	double zipPosition;
-	float setpoint = 0;
-	float wdown = 387;
-	float wlift = 250;
 	int step;
 	int instep;
 
 	/**
 	 * Constructor
 	 */
-	public RedAuton() {
+	public RedMtnAuton() {
 
 	}
 
@@ -98,7 +92,6 @@ public class RedAuton extends OpMode {
 		hook = hardwareMap.dcMotor.get("hook");
 		lwheelie = hardwareMap.dcMotor.get("lwheelie");
 		rwheelie = hardwareMap.dcMotor.get("rwheelie");
-		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
 
@@ -118,106 +111,15 @@ public class RedAuton extends OpMode {
 	@Override
 	public void loop() {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
+		rwheelie.setPower(0.1);
+		lwheelie.setPower(-0.1);
 		switch (step) {
-			case 0: //put down wheelie bar
-				if (rwheelie.getCurrentPosition() < 300){
-					rwheelie.setPower(0.15);
-					lwheelie.setPower(-0.15);
-					break;
-				}
-				else {
-					rwheelie.setPower(0);
-					lwheelie.setPower(0);
-					step++;
-					break;
-				}
-			case 1: //****Delay lies here****
-				 {
-					step++;
-					break;
-				}
-			case 2:
-				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
-				if (timer<18) {
-					right = -0.12;
-					left = -1.0;
-					break;
-				}
-				else {
-					//'step ++'(--) increments(decreases) 'step' by 1, if 'step = x' then 'step' will change to x (if x is a valid value)
-					step++;
-					break;
-				}
-			case 3: //this case is going to reset the timer
-				t = this.time;
-				step++;
-				break;
-
-			case 4: //todo make 180 degree turn longer
-				left = 0;
-				right = 0;
-				armMotor.setPower(0);
-				if (timer< 3) {
-					right = -1.0;
-					left = 1.0;
-
-					telemetry.addData("time ", timer);
-					telemetry.addData("case", step);
-					break;
-				}
-				else {
-					step++;
-					break;
-				}
-
-			case 5: //reset timer
-				t = this.time;
-				step++;
-				break;
-
-
-			case 6:  //case 2 is going to display the time
-				left = 0;
-				right = 0;
-			if (timer <= 5) {
-				switch (instep) {
-					case 0:
-						if (armMotor.getCurrentPosition() <= 10000)
-						{
-							armMotor.setPower(0.7);
-							break;
-					}
-					else {
-							armMotor.setPower(0);
-							instep++;
-							break;
-						}
-					case 1:
-						if (hook.getCurrentPosition() <= 1500)
-						{
-							hook.setPower(0.7);
-							break;
-						}
-						else {
-							hook.setPower(0);
-							instep++;
-							break;
-						}
-
-				}
-				break;
-			}
-			else {
-				step++;
-				break;
-			}
-
-			case 7: //reset timer
+			case 0: //reset timer
 				t=this.time;
 				step++;
 				break;
 
-			case 8:  //back up
+			case 1:  //back up
 				left = 0;
 				right = 0;
 				armMotor.setPower(0);
@@ -232,15 +134,15 @@ public class RedAuton extends OpMode {
 					break;
 				}
 
-			case 9: //reset timer
+			case 2: //reset timer
 				t=this.time;
 				step++;
 				break;
 
-			case 10:  //turn toward mountain
-				if (timer <0.9) {
-					right = 1.0;
-					left = -1.0;
+			case 3:  //turn toward mountain
+				if (timer <1.5) {
+					right = -1.0;
+					left = 1.0;
 					break;
 				}
 				else {
@@ -248,7 +150,7 @@ public class RedAuton extends OpMode {
 					break;
 				}
 
-			case 11:  //drive forward
+			case 4:  //drive forward
 				if (timer >= 0.9 && timer< 3.5) {
 					right = 1.0;
 					left = 1.0;
@@ -292,7 +194,6 @@ public class RedAuton extends OpMode {
         telemetry.addData("system time ", this.time);
 		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", right));
 		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", left));
-		telemetry.addData("uSonic", distance);
 		}
 
 
@@ -311,20 +212,4 @@ public class RedAuton extends OpMode {
 	 * scaled value is less than linear.  This is to make it easier to drive
 	 * the robot more precisely at slower speeds.
 	 */
-	void wheelie(float setpoint){  // this method allows you to pass in a proportional constant
-		float wdelta = setpoint - rwheelie.getCurrentPosition();  //left wheeliebar up
-		double pOut=.0017*wdelta;
-		pOut= Range.clip(pOut, -1, 1);
-		if (Math.abs(wdelta)>50){
-			lwheelie.setPower(pOut);
-			rwheelie.setPower(pOut);
-		}	//Call Proportional Control Method
-		else {
-			lwheelie.setPower(0);
-			rwheelie.setPower(0);
-		}
-
-
-		return;
-	}
 }

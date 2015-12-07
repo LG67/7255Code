@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 
-public class RedAuton extends OpMode {
+public class RedTest extends OpMode {
 
 	/*
 	 * Note: the configuration of the servos is such that
@@ -58,20 +58,19 @@ public class RedAuton extends OpMode {
 	UltrasonicSensor uSonic;
 	double t = 0;  //Takes a snapshot of the time on loop 0
 	double timer = 0;  //Time that we're on the loop
-	double distance;
+	float wdown = 300;
+	float wlift = 250;
+	float setpoint = 0;
 	double right = 0.0;
 	double left = 0.0;
 	double zipPosition;
-	float setpoint = 0;
-	float wdown = 387;
-	float wlift = 250;
 	int step;
 	int instep;
 
 	/**
 	 * Constructor
 	 */
-	public RedAuton() {
+	public RedTest() {
 
 	}
 
@@ -119,26 +118,31 @@ public class RedAuton extends OpMode {
 	public void loop() {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
 		switch (step) {
+
 			case 0: //put down wheelie bar
-				if (rwheelie.getCurrentPosition() < 300){
-					rwheelie.setPower(0.15);
-					lwheelie.setPower(-0.15);
+				setpoint = wdown;
+				wheelie(setpoint);
+				step++;
+				break;
+			case 1:
+				setpoint = wdown;
+				wheelie(setpoint);
+				if (timer<5) {
+					right = -0.12;
+					left = -1.0;
 					break;
 				}
 				else {
-					rwheelie.setPower(0);
-					lwheelie.setPower(0);
-					step++;
-					break;
-				}
-			case 1: //****Delay lies here****
-				 {
 					step++;
 					break;
 				}
 			case 2:
+				setpoint = wdown;
+				wheelie(setpoint);
+				double sonic = uSonic.getUltrasonicLevel();
+				double distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
-				if (timer<18) {
+				if (distance > 12) {
 					right = -0.12;
 					left = -1.0;
 					break;
@@ -154,6 +158,8 @@ public class RedAuton extends OpMode {
 				break;
 
 			case 4: //todo make 180 degree turn longer
+				setpoint = wdown;
+				wheelie(setpoint);
 				left = 0;
 				right = 0;
 				armMotor.setPower(0);
@@ -176,13 +182,13 @@ public class RedAuton extends OpMode {
 				break;
 
 
-			case 6:  //case 2 is going to display the time
+			case 6:
 				left = 0;
 				right = 0;
 			if (timer <= 5) {
 				switch (instep) {
 					case 0:
-						if (armMotor.getCurrentPosition() <= 10000)
+						if (armMotor.getCurrentPosition() <= 17000)
 						{
 							armMotor.setPower(0.7);
 							break;
@@ -205,6 +211,8 @@ public class RedAuton extends OpMode {
 						}
 
 				}
+
+				telemetry.addData("time ", timer);
 				break;
 			}
 			else {
@@ -252,15 +260,12 @@ public class RedAuton extends OpMode {
 				if (timer >= 0.9 && timer< 3.5) {
 					right = 1.0;
 					left = 1.0;
+					setpoint = wdown;
+					wheelie(setpoint);
 					break;
 				}
-				if (rwheelie.getCurrentPosition()>300){
-					rwheelie.setPower(-.15);
-					lwheelie.setPower(.15);
-				}
-				else {
-					rwheelie.setPower(0);
-					lwheelie.setPower(0);
+				else {	setpoint = wlift;
+					wheelie(setpoint);
 					step++;
 					break;
 				}
@@ -292,7 +297,6 @@ public class RedAuton extends OpMode {
         telemetry.addData("system time ", this.time);
 		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", right));
 		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", left));
-		telemetry.addData("uSonic", distance);
 		}
 
 
@@ -311,6 +315,8 @@ public class RedAuton extends OpMode {
 	 * scaled value is less than linear.  This is to make it easier to drive
 	 * the robot more precisely at slower speeds.
 	 */
+
+	//proportional control for wheelie bar
 	void wheelie(float setpoint){  // this method allows you to pass in a proportional constant
 		float wdelta = setpoint - rwheelie.getCurrentPosition();  //left wheeliebar up
 		double pOut=.0017*wdelta;

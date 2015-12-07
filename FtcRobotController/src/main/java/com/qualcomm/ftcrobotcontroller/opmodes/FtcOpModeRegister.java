@@ -65,8 +65,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("BlueAuton", BlueAuton.class);
     manager.register("BlueDelay", BlueDelay.class);
     manager.register("GraceAutonomous", GraceAutonomous.class);
-    manager.register ("Camera", AutonomousCamera.class);
-    manager.register ("Accel", AccelZTEstOp.class);
+    manager.register("RedMtnAuton", RedMtnAuton.class);
 
 
 

@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -64,9 +65,11 @@ public class SteamTeleOp extends OpMode {
 	DcMotor rwheelie;
 	Servo rzip;
 	Servo lzip;
+	UltrasonicSensor uSonic;
 
 	double lzipPosition=0.95;
 	double rzipPosition=0.0;
+	double distance;
 	float up;
 	float arm;
 
@@ -101,6 +104,7 @@ public class SteamTeleOp extends OpMode {
 		rzip = hardwareMap.servo.get("rzip");
 		rwheelie = hardwareMap.dcMotor.get("rwheelie");
 		lwheelie = hardwareMap.dcMotor.get("lwheelie");
+		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
 
 		lzip.setPosition(.95);
 		rzip.setPosition(.0);
@@ -119,6 +123,9 @@ public class SteamTeleOp extends OpMode {
 		//GAMEPAD1
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and 1 is full down
 		// direction: left_stick_x ranges from -1 to 1, where -1 is full right and 1 is full left
+		double sonic = uSonic.getUltrasonicLevel();
+		distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
+
 		float throttle = -gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
 		float right = throttle + direction;
@@ -172,12 +179,12 @@ public class SteamTeleOp extends OpMode {
         }
 		//****************************Arm Control*************************
 		if (gamepad2.a) {
-            float adelta = 14000 - armMotor.getCurrentPosition();  //high bar position
+            float adelta = 21000 - armMotor.getCurrentPosition();  //high bar position
             if (Math.abs(adelta)>50){
                 armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
             else {armMotor.setPower(0);}}				//+/-10 tick deadband
         else if (gamepad2.b) {
-            float bdelta = 0 - armMotor.getCurrentPosition();  //drive position
+            float bdelta = 7000 - armMotor.getCurrentPosition();  //drive position
             if (Math.abs(bdelta)>50){
                 armMotor.setPower(controlOut(bdelta));}
             else {armMotor.setPower(0);}}
@@ -245,6 +252,7 @@ public class SteamTeleOp extends OpMode {
 		telemetry.addData("rwheelie", rwheelie.getCurrentPosition());
 		telemetry.addData("hook", hook.getCurrentPosition() );
 		telemetry.addData("arm", armMotor.getCurrentPosition() );
+		telemetry.addData("uSonic", distance);
 	}
 
 	/*
