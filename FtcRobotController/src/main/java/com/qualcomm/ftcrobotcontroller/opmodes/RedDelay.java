@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class RedDelay extends OpMode {
 
@@ -55,6 +56,7 @@ public class RedDelay extends OpMode {
 	Servo lzip;
 	Servo rzip;
 	UltrasonicSensor uSonic;
+	TouchSensor touch;
 	double t = 0;  //Takes a snapshot of the time on loop 0
 	double timer = 0;  //Time that we're on the loop
 
@@ -97,6 +99,7 @@ public class RedDelay extends OpMode {
 		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
+		touch = hardwareMap.touchSensor.get("touch");
 
 		// assign the starting position of the rZip and lZip
 		zipPosition = 0.2;
@@ -138,18 +141,21 @@ public class RedDelay extends OpMode {
 					break;
 				}
 			case 2:
-				double sonic = uSonic.getUltrasonicLevel();
-				double distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
+				//double sonic = uSonic.getUltrasonicLevel();
+				//double distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
-				if (distance > 12) {
-					right = -0.12;
+				//if (distance > 12) {
+				if (!touch.isPressed())
+				{	right = -0.12;
 					left = -1.0;
 					break;
 				}
 				else {
 					//'step ++'(--) increments(decreases) 'step' by 1, if 'step = x' then 'step' will change to x (if x is a valid value)
-					step++;
-					break;
+				left = 0;
+				right = 0;
+				step++;
+				break;
 				}
 			case 3: //this case is going to reset the timer
 				t = this.time;
@@ -163,29 +169,23 @@ public class RedDelay extends OpMode {
 				if (timer< 3) {
 					right = -1.0;
 					left = 1.0;
-
-					telemetry.addData("time ", timer);
-					telemetry.addData("case", step);
 					break;
 				}
 				else {
 					step++;
 					break;
 				}
-
 			case 5: //reset timer
 				t = this.time;
 				step++;
 				break;
-
-
 			case 6:  //case 2 is going to display the time
 				left = 0;
 				right = 0;
-			if (timer <= 5) {
+			if (timer <= 9) {
 				switch (instep) {
 					case 0:
-						if (armMotor.getCurrentPosition() <= 10000)
+						if (armMotor.getCurrentPosition() <= 17000)
 						{
 							armMotor.setPower(0.7);
 							break;
