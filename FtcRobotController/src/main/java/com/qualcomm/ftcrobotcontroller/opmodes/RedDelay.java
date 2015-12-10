@@ -131,7 +131,7 @@ public class RedDelay extends OpMode {
 					break;
 				}
 			case 1: //****Delay lies here****
-				if (timer<5) {
+				if (timer<8) {
 					right =0;
 					left = 0;
 					break;
@@ -185,9 +185,9 @@ public class RedDelay extends OpMode {
 			if (timer <= 9) {
 				switch (instep) {
 					case 0:
-						if (armMotor.getCurrentPosition() <= 17000)
+						if (armMotor.getCurrentPosition() >= -19079)
 						{
-							armMotor.setPower(0.7);
+							armMotor.setPower(-0.7);
 							break;
 					}
 					else {

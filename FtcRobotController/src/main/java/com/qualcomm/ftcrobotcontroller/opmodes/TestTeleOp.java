@@ -33,9 +33,10 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
+import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -64,9 +65,11 @@ public class TestTeleOp extends OpMode {
 	DcMotor rwheelie;
 	Servo rzip;
 	Servo lzip;
+	UltrasonicSensor uSonic;
 
 	double lzipPosition=0.95;
 	double rzipPosition=0.0;
+	double distance;
 	float up;
 	float arm;
 
@@ -101,6 +104,7 @@ public class TestTeleOp extends OpMode {
 		rzip = hardwareMap.servo.get("rzip");
 		rwheelie = hardwareMap.dcMotor.get("rwheelie");
 		lwheelie = hardwareMap.dcMotor.get("lwheelie");
+		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
 
 		lzip.setPosition(.95);
 		rzip.setPosition(.0);
@@ -119,6 +123,9 @@ public class TestTeleOp extends OpMode {
 		//GAMEPAD1
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and 1 is full down
 		// direction: left_stick_x ranges from -1 to 1, where -1 is full right and 1 is full left
+		double sonic = uSonic.getUltrasonicLevel();
+		distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
+
 		float throttle = -gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
 		float right = throttle + direction;
@@ -144,8 +151,8 @@ public class TestTeleOp extends OpMode {
 		if (gamepad1.right_bumper) {
 			// if the left bumper is pushed on gamepad1, decrease the position of
 			// the zip servo.
-			lzipPosition = 0.5;
-			rzipPosition = 0.5;
+			lzipPosition = 0.55;
+			rzipPosition = 0.45;
 		}
 		lzip.setPosition(lzipPosition);
 		rzip.setPosition(rzipPosition);
@@ -172,12 +179,12 @@ public class TestTeleOp extends OpMode {
         }
 		//****************************Arm Control*************************
 		if (gamepad2.a) {
-            float adelta = 20000 - armMotor.getCurrentPosition();  //high bar position
+            float adelta = 21000 - armMotor.getCurrentPosition();  //high bar position
             if (Math.abs(adelta)>50){
                 armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
             else {armMotor.setPower(0);}}				//+/-10 tick deadband
         else if (gamepad2.b) {
-            float bdelta = 10000 - armMotor.getCurrentPosition();  //drive position
+            float bdelta = 7000 - armMotor.getCurrentPosition();  //drive position
             if (Math.abs(bdelta)>50){
                 armMotor.setPower(controlOut(bdelta));}
             else {armMotor.setPower(0);}}
@@ -202,8 +209,8 @@ public class TestTeleOp extends OpMode {
 		if (gamepad2.left_bumper) {
 			float wdelta = 0 - rwheelie.getCurrentPosition();  //left wheeliebar up
 			if (Math.abs(wdelta)>50){
-				lwheelie.setPower(-controlOut(.0012, wdelta));
-				rwheelie.setPower(controlOut(.0012, wdelta));
+				lwheelie.setPower(-controlOut(.0017, wdelta));
+				rwheelie.setPower(controlOut(.0017, wdelta));
 			}	//Call Proportional Control Method
 			else {lwheelie.setPower(0);
 				rwheelie.setPower(0);
@@ -245,6 +252,7 @@ public class TestTeleOp extends OpMode {
 		telemetry.addData("rwheelie", rwheelie.getCurrentPosition());
 		telemetry.addData("hook", hook.getCurrentPosition() );
 		telemetry.addData("arm", armMotor.getCurrentPosition() );
+		telemetry.addData("uSonic", distance);
 	}
 
 	/*
@@ -292,7 +300,7 @@ public class TestTeleOp extends OpMode {
 	}
 
 	/*
-	 * This method provides proportional position control
+	 * This method provides proportional position control to get to arm and hook set points
 	 */
 
 	double controlOut(double delta){
@@ -301,7 +309,9 @@ public class TestTeleOp extends OpMode {
 		pOut=Range.clip(pOut,-1,1);
 		return pOut;
 	}
-
+	/*
+         * This method provides adjustable proportional position control for the wheelie bar
+         */
 	double controlOut(double k, double delta){  // this method allows you to pass in a proportional constant
 		double pOut;
 		pOut=k*delta;

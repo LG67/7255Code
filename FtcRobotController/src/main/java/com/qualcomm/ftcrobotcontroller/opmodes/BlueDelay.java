@@ -34,13 +34,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
-/**
- * TeleOp Mode
- * <p>
- * Enables control of the robot via the gamepad
- */
 public class BlueDelay extends OpMode {
 
 	/*
@@ -60,6 +56,7 @@ public class BlueDelay extends OpMode {
 	Servo lzip;
 	Servo rzip;
 	UltrasonicSensor uSonic;
+	TouchSensor touch;
 	double t = 0;  //Takes a snapshot of the time on loop 0
 	double timer = 0;  //Time that we're on the loop
 
@@ -78,7 +75,7 @@ public class BlueDelay extends OpMode {
 
 	/*
 	 * Code to run when the op mode is first enabled goes here
-	 * 
+	 *
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
 	 */
 	@Override
@@ -88,7 +85,7 @@ public class BlueDelay extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-		
+
 		frontRight = hardwareMap.dcMotor.get("rdrivef");
 		frontLeft = hardwareMap.dcMotor.get("ldrivef");
 		frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -102,6 +99,7 @@ public class BlueDelay extends OpMode {
 		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
+		touch = hardwareMap.touchSensor.get("touch");
 
 		// assign the starting position of the rZip and lZip
 		zipPosition = 0.2;
@@ -113,7 +111,7 @@ public class BlueDelay extends OpMode {
 
 	/*
 	 * This method will be called repeatedly in a loop
-	 * 
+	 *
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#run()
 	 */
 	@Override
@@ -121,21 +119,20 @@ public class BlueDelay extends OpMode {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
 		switch (step) {
 			case 0: //put down wheelie bar
-				//todo fix ultrasonic sensing nonexistent things
-				if (rwheelie.getCurrentPosition() < 300){
+				if (rwheelie.getCurrentPosition() < 380){
 					rwheelie.setPower(0.15);
 					lwheelie.setPower(-0.15);
 					break;
 				}
 				else {
-					rwheelie.setPower(0);
-					lwheelie.setPower(0);
+					rwheelie.setPower(0.30);
+					lwheelie.setPower(-0.30);
 					step++;
 					break;
 				}
-			case 1:
-				if (timer<5) {
-					right = 0;
+			case 1: //****Delay lies here****
+				if (timer<8) {
+					right =0;
 					left = 0;
 					break;
 				}
@@ -144,16 +141,19 @@ public class BlueDelay extends OpMode {
 					break;
 				}
 			case 2:
-				double sonic = uSonic.getUltrasonicLevel();
-				double distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
+				//double sonic = uSonic.getUltrasonicLevel();
+				//double distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
-				if (distance > 12) {
-					right = -1.0;
-					left = -0.12;
+				//if (distance > 12) {
+				if (!touch.isPressed())
+				{	right = -0.12;
+					left = -1.0;
 					break;
 				}
 				else {
 					//'step ++'(--) increments(decreases) 'step' by 1, if 'step = x' then 'step' will change to x (if x is a valid value)
+					left = 0;
+					right = 0;
 					step++;
 					break;
 				}
@@ -167,72 +167,53 @@ public class BlueDelay extends OpMode {
 				right = 0;
 				armMotor.setPower(0);
 				if (timer< 3) {
-					right = 1.0;
-					left = -1.0;
-
-					telemetry.addData("time ", timer);
-					telemetry.addData("case", step);
+					right = -1.0;
+					left = 1.0;
 					break;
 				}
 				else {
 					step++;
 					break;
 				}
-
 			case 5: //reset timer
 				t = this.time;
 				step++;
 				break;
-
-
 			case 6:  //case 2 is going to display the time
 				left = 0;
 				right = 0;
-			if (timer <= 9.5 ) {
-				switch (instep) {
-					case 0:
-						if (armMotor.getCurrentPosition() <= 10000)
-						{
-							armMotor.setPower(0.7);
-							break;
+				if (timer <= 9) {
+					switch (instep) {
+						case 0:
+							if (armMotor.getCurrentPosition() >= -19079)
+							{
+								armMotor.setPower(-0.7);
+								break;
+							}
+							else {
+								armMotor.setPower(0);
+								instep++;
+								break;
+							}
+						case 1:
+							if (hook.getCurrentPosition() <= 1500)
+							{
+								hook.setPower(0.7);
+								break;
+							}
+							else {
+								hook.setPower(0);
+								instep++;
+								break;
+							}
+
 					}
-					else {
-							armMotor.setPower(0);
-							instep++;
-							break;
-						}
-					case 1:
-						if (hook.getCurrentPosition() <= 1500)
-						{
-							hook.setPower(0.7);
-							break;
-						}
-						else {
-							hook.setPower(0);
-							instep++;
-							break;
-						}
-					case 2:
-						if (armMotor.getCurrentPosition() >= 0)
-						{
-							armMotor.setPower(-0.7);
-							break;
-						}
-						else {
-							armMotor.setPower(0);
-							instep++;
-							break;
-						}
-
+					break;
 				}
-
-				telemetry.addData("time ", timer);
-				break;
-			}
-			else {
-				step++;
-				break;
-			}
+				else {
+					step++;
+					break;
+				}
 
 			case 7: //reset timer
 				t=this.time;
@@ -261,8 +242,8 @@ public class BlueDelay extends OpMode {
 
 			case 10:  //turn toward mountain
 				if (timer <0.9) {
-					right = -1.0;
-					left = 1.0;
+					right = 1.0;
+					left = -1.0;
 					break;
 				}
 				else {
@@ -299,10 +280,10 @@ public class BlueDelay extends OpMode {
 
 		}
 
-		frontRight.setPower(left);
-		frontLeft.setPower(right);
-		backRight.setPower(left);
-		backLeft.setPower(right);
+		frontRight.setPower(right);
+		frontLeft.setPower(left);
+		backRight.setPower(right);
+		backLeft.setPower(left);
 
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
@@ -311,24 +292,24 @@ public class BlueDelay extends OpMode {
 		 * are currently write only.
 		 */
 
-        telemetry.addData("system time ", this.time);
+		telemetry.addData("system time ", this.time);
 		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", right));
 		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", left));
-		}
+	}
 
 
 	/*
 	 * Code to run when the op mode is first disabled goes here
-	 * 
+	 *
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#stop()
 	 */
 	@Override
 	public void stop() {
 
 	}
-	
+
 	/*
-	 * This method scales the joystick input so for low joystick values, the 
+	 * This method scales the joystick input so for low joystick values, the
 	 * scaled value is less than linear.  This is to make it easier to drive
 	 * the robot more precisely at slower speeds.
 	 */

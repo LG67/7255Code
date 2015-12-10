@@ -119,14 +119,14 @@ public class RedAuton extends OpMode {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
 		switch (step) {
 			case 0: //put down wheelie bar
-				if (rwheelie.getCurrentPosition() < 300){
+				if (rwheelie.getCurrentPosition() < 380){
 					rwheelie.setPower(0.15);
 					lwheelie.setPower(-0.15);
 					break;
 				}
 				else {
-					rwheelie.setPower(0);
-					lwheelie.setPower(0);
+					rwheelie.setPower(0.30);
+					lwheelie.setPower(-0.30);
 					step++;
 					break;
 				}
@@ -185,9 +185,9 @@ public class RedAuton extends OpMode {
 				if (timer <= 9) {
 					switch (instep) {
 						case 0:
-							if (armMotor.getCurrentPosition() <= 17000)
+							if (armMotor.getCurrentPosition() >= -19079)
 							{
-								armMotor.setPower(0.7);
+								armMotor.setPower(-0.7);
 								break;
 							}
 							else {

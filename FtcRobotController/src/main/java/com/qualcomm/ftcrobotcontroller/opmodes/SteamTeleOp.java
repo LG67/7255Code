@@ -178,27 +178,37 @@ public class SteamTeleOp extends OpMode {
             armMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
 		//****************************Arm Control*************************
-		if (gamepad2.a) {
-            float adelta = 21000 - armMotor.getCurrentPosition();  //high bar position
+		if (gamepad2.y) { //package
+            float adelta = -30719 - armMotor.getCurrentPosition();
             if (Math.abs(adelta)>50){
-                armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
-            else {armMotor.setPower(0);}}				//+/-10 tick deadband
-        else if (gamepad2.b) {
-            float bdelta = 7000 - armMotor.getCurrentPosition();  //drive position
+                armMotor.setPower(controlOut(.0001,adelta));}	//Call Proportional Control Method
+            else {armMotor.setPower(0);}}				//+/-50 tick deadband
+        else if (gamepad2.b) { //people drop
+            float bdelta = -19079 - armMotor.getCurrentPosition();
             if (Math.abs(bdelta)>50){
-                armMotor.setPower(controlOut(bdelta));}
+                armMotor.setPower(controlOut(.0001,bdelta));}
             else {armMotor.setPower(0);}}
+		else if (gamepad2.x) { //reach
+			float xdelta = -21902 - armMotor.getCurrentPosition();
+			if (Math.abs(xdelta)>50){
+				armMotor.setPower(controlOut(xdelta));}
+			else {armMotor.setPower(0);}}
+		else if (gamepad2.a) { //joust
+			float ydelta = -5219 - armMotor.getCurrentPosition();
+			if (Math.abs(ydelta)>50){
+				armMotor.setPower(controlOut(ydelta));}
+			else {armMotor.setPower(0);}}
         else
-        {armMotor.setPower(arm);}	// manual control
+        {armMotor.setPower(-arm);}	// manual control
 
 		//****************************Hook Control*************************
-		if (gamepad2.x) {
-			float adelta = 1533 - hook.getCurrentPosition();  //hook out
+		if (gamepad1.x) {
+			float adelta = 1533 - hook.getCurrentPosition();  //hook in
 			if (Math.abs(adelta)>50){
 				hook.setPower(controlOut(adelta));}	//Call Proportional Control Method
 			else {hook.setPower(0);}}				//+/-10 tick deadband
-		else if (gamepad2.y) {
-			float bdelta = 5000 - hook.getCurrentPosition();  //hook in
+		else if (gamepad1.y) {
+			float bdelta = 5000 - hook.getCurrentPosition();  //hook out
 			if (Math.abs(bdelta)>50){
 				hook.setPower(controlOut(bdelta));}
 			else {hook.setPower(0);}}  // manual control
