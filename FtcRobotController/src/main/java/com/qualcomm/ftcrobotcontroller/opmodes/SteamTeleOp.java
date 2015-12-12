@@ -203,17 +203,28 @@ public class SteamTeleOp extends OpMode {
 
 		//****************************Hook Control*************************
 		if (gamepad1.x) {
-			float adelta = 1533 - hook.getCurrentPosition();  //hook in
-			if (Math.abs(adelta)>50){
-				hook.setPower(controlOut(adelta));}	//Call Proportional Control Method
+			float xdelta = 1533 - hook.getCurrentPosition();  //hook in
+			if (Math.abs(xdelta)>50){
+				hook.setPower(controlOut(xdelta));}	//Call Proportional Control Method
 			else {hook.setPower(0);}}				//+/-10 tick deadband
 		else if (gamepad1.y) {
+			float ydelta = 17734 - hook.getCurrentPosition();  //hook out
+			if (Math.abs(ydelta)>50){
+				hook.setPower(controlOut(ydelta));}
+			else {hook.setPower(0);}}  // manual control
+		else if (gamepad1.a) {
+			float adelta = 50 - hook.getCurrentPosition();  //hook out
+			if (Math.abs(adelta)>50){
+				hook.setPower(controlOut(adelta));}
+			else {hook.setPower(0);}}
+		else if (gamepad1.b) {
 			float bdelta = 5000 - hook.getCurrentPosition();  //hook out
 			if (Math.abs(bdelta)>50){
 				hook.setPower(controlOut(bdelta));}
-			else {hook.setPower(0);}}  // manual control
-		else
+			else {hook.setPower(0);}}
+		else if (hook.getCurrentPosition()<17734)
 		{hook.setPower(up);}
+		else hook.setPower(0);
 
 		//*****************************Wheelie Bar**************************
 		if (gamepad2.left_bumper) {
