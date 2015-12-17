@@ -35,8 +35,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
+
 
 
 /**
@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class TestTeleOp extends OpMode {
+public class BackUpTeleOp extends OpMode {
 
 	/*
 	 * Note: the configuration of the servos is such that
@@ -61,22 +61,25 @@ public class TestTeleOp extends OpMode {
 	DcMotor motorfRight;
 	DcMotor motorfLeft;
 	DcMotor hook;
-	DcMotor lwheelie;
+	DcMotor rejector;
 	DcMotor rwheelie;
 	Servo rzip;
 	Servo lzip;
-	UltrasonicSensor uSonic;
 
 	double lzipPosition=0.95;
 	double rzipPosition=0.0;
 	double distance;
 	float up;
 	float arm;
+	int push=0;
+	int wbspeed;
+
+
 
 	/**
 	 * Constructor
 	 */
-	public TestTeleOp() {
+	public BackUpTeleOp() {
 
 	}
 
@@ -103,9 +106,7 @@ public class TestTeleOp extends OpMode {
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
 		rwheelie = hardwareMap.dcMotor.get("rwheelie");
-		lwheelie = hardwareMap.dcMotor.get("lwheelie");
-		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
-
+		rejector = hardwareMap.dcMotor.get("rejector");
 		lzip.setPosition(.95);
 		rzip.setPosition(.0);
 
@@ -123,8 +124,6 @@ public class TestTeleOp extends OpMode {
 		//GAMEPAD1
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and 1 is full down
 		// direction: left_stick_x ranges from -1 to 1, where -1 is full right and 1 is full left
-		double sonic = uSonic.getUltrasonicLevel();
-		distance = 0.40538*sonic-1.17;   		// convert ultrasonic level to inches
 
 		float throttle = -gamepad1.left_stick_y;
 		float direction = gamepad1.right_stick_x;
@@ -167,79 +166,121 @@ public class TestTeleOp extends OpMode {
 		up = Range.clip(up, -1, 1);
 
 		//****************************Encoder Reset*************************
-		if (gamepad2.dpad_up){
+		if (gamepad1.dpad_left){
+			hook.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+		}
+
+		if (gamepad1.dpad_up){
             rwheelie.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         }
-		if (gamepad2.dpad_right){
+		if (gamepad1.dpad_right){
 			armMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 		}
-        if (gamepad2.dpad_down){
+        if (gamepad1.dpad_down){
 			rwheelie.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             armMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+			hook.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
+
 		//****************************Arm Control*************************
-		if (gamepad2.a) {
-            float adelta = 21000 - armMotor.getCurrentPosition();  //high bar position
-            if (Math.abs(adelta)>50){
-                armMotor.setPower(controlOut(adelta));}	//Call Proportional Control Method
-            else {armMotor.setPower(0);}}				//+/-10 tick deadband
-        else if (gamepad2.b) {
-            float bdelta = 7000 - armMotor.getCurrentPosition();  //drive position
-            if (Math.abs(bdelta)>50){
-                armMotor.setPower(controlOut(bdelta));}
-            else {armMotor.setPower(0);}}
-        else
-        {armMotor.setPower(arm);}	// manual control
+		if (hook.getCurrentPosition() < 2500) {
+			armMotor.setPower(0); }
+		else {
+
+			if (gamepad2.y) { //package
+				float adelta = -30719 - armMotor.getCurrentPosition();
+				if (Math.abs(adelta) > 50) {
+					armMotor.setPower(controlOut(.0001, adelta));
+				}    //Call Proportional Control Method
+				else {
+					armMotor.setPower(0);
+				}
+			}                //+/-50 tick deadband
+			else if (gamepad2.b) { //people drop
+				float bdelta = -19079 - armMotor.getCurrentPosition();
+				if (Math.abs(bdelta) > 50) {
+					armMotor.setPower(controlOut(.0001, bdelta));
+				} else {
+					armMotor.setPower(0);
+				}
+			} else if (gamepad2.x) { //reach
+				float xdelta = -21902 - armMotor.getCurrentPosition();
+				if (Math.abs(xdelta) > 50) {
+					armMotor.setPower(controlOut(xdelta));
+				} else {
+					armMotor.setPower(0);
+				}
+			} else if (gamepad2.a) { //joust
+				float ydelta = -5219 - armMotor.getCurrentPosition();
+				if (Math.abs(ydelta) > 50) {
+					armMotor.setPower(controlOut(ydelta));
+				} else {
+					armMotor.setPower(0);
+				}
+			} else {
+				armMotor.setPower(-arm);
+			}    // manual control
+		}
 
 		//****************************Hook Control*************************
-		if (gamepad2.x) {
-			float adelta = 1533 - hook.getCurrentPosition();  //hook out
-			if (Math.abs(adelta)>50){
-				hook.setPower(controlOut(adelta));}	//Call Proportional Control Method
+		if (gamepad1.x) {
+			float xdelta = 2500 - hook.getCurrentPosition();  //hook in
+			if (Math.abs(xdelta)>50){
+				hook.setPower(controlOut(xdelta));}	//Call Proportional Control Method
 			else {hook.setPower(0);}}				//+/-10 tick deadband
-		else if (gamepad2.y) {
-			float bdelta = 5000 - hook.getCurrentPosition();  //hook in
+		else if (gamepad1.y) {
+			float ydelta = 17750 - hook.getCurrentPosition();  //hook out
+			if (Math.abs(ydelta)>50){
+				hook.setPower(controlOut(ydelta));}
+			else {hook.setPower(0);}}  // manual control
+		else if (gamepad1.a) {
+			float adelta = 50 - hook.getCurrentPosition();  //package
+			if (Math.abs(adelta)>50){
+				hook.setPower(controlOut(adelta));}
+			else {hook.setPower(0);}}
+		else if (gamepad1.b) {
+			float bdelta = 5000 - hook.getCurrentPosition();  //climber drop
 			if (Math.abs(bdelta)>50){
 				hook.setPower(controlOut(bdelta));}
-			else {hook.setPower(0);}}  // manual control
-		else
+			else {hook.setPower(0);}}
+		else if (hook.getCurrentPosition()<17750)
 		{hook.setPower(up);}
+		else hook.setPower(0);
 
 		//*****************************Wheelie Bar**************************
 		if (gamepad2.left_bumper) {
 			float wdelta = 0 - rwheelie.getCurrentPosition();  //left wheeliebar up
 			if (Math.abs(wdelta)>50){
-				lwheelie.setPower(-controlOut(.0017, wdelta));
-				rwheelie.setPower(controlOut(.0017, wdelta));
+				rwheelie.setPower(controlOut(.003, wdelta));
 			}	//Call Proportional Control Method
-			else {lwheelie.setPower(0);
-				rwheelie.setPower(0);
+			else {rwheelie.setPower(0);
 			}
 		}				//+/-10 tick deadband
 		else if (gamepad2.right_bumper) {
 			float wdelta = 387 - rwheelie.getCurrentPosition();
 			if (Math.abs(wdelta) > 50) {
-				lwheelie.setPower(-controlOut(.001, wdelta));
 				rwheelie.setPower(controlOut(.001, wdelta));
 			} else {
-				lwheelie.setPower(0);
 				rwheelie.setPower(0);
 			}
 		}
 		else if (gamepad2.left_trigger>.1){
-			lwheelie.setPower(.25*gamepad2.left_trigger);
 			rwheelie.setPower(-.25*gamepad2.left_trigger);
 			//manual control`
 		}
 		else if (Math.abs(gamepad2.right_trigger)>0.1 && rwheelie.getCurrentPosition()<400){
-			lwheelie.setPower(-.75*gamepad2.right_trigger);
 			rwheelie.setPower(.75*gamepad2.right_trigger);
 		}
 		else {
-				lwheelie.setPower(0);
-				rwheelie.setPower(0);
+			rwheelie.setPower(0);
 		}
 
+//**************************REJECTOR CODE***********************
+		if (gamepad2.dpad_down) {
+			push++;
+			wbspeed=push%2;
+		}
+		rejector.setPower(wbspeed*0.5);
 
 
 		// manual control

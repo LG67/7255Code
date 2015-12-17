@@ -34,8 +34,8 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 public class RedDelay extends OpMode {
 
@@ -75,7 +75,7 @@ public class RedDelay extends OpMode {
 
 	/*
 	 * Code to run when the op mode is first enabled goes here
-	 * 
+	 *
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
 	 */
 	@Override
@@ -85,7 +85,7 @@ public class RedDelay extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-		
+
 		frontRight = hardwareMap.dcMotor.get("rdrivef");
 		frontLeft = hardwareMap.dcMotor.get("ldrivef");
 		frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -111,7 +111,7 @@ public class RedDelay extends OpMode {
 
 	/*
 	 * This method will be called repeatedly in a loop
-	 * 
+	 *
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#run()
 	 */
 	@Override
@@ -119,19 +119,19 @@ public class RedDelay extends OpMode {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
 		switch (step) {
 			case 0: //put down wheelie bar
-				if (rwheelie.getCurrentPosition() < 300){
+				if (rwheelie.getCurrentPosition() < 380){
 					rwheelie.setPower(0.15);
 					lwheelie.setPower(-0.15);
 					break;
 				}
 				else {
-					rwheelie.setPower(0);
-					lwheelie.setPower(0);
+					rwheelie.setPower(0.30);
+					lwheelie.setPower(-0.30);
 					step++;
 					break;
 				}
-			case 1: //****Delay lies here****
-				if (timer<8) {
+			case 1: //****Delay lies here,delay is 7 seconds****
+				if (timer<7) {
 					right =0;
 					left = 0;
 					break;
@@ -152,10 +152,10 @@ public class RedDelay extends OpMode {
 				}
 				else {
 					//'step ++'(--) increments(decreases) 'step' by 1, if 'step = x' then 'step' will change to x (if x is a valid value)
-				left = 0;
-				right = 0;
-				step++;
-				break;
+					left = 0;
+					right = 0;
+					step++;
+					break;
 				}
 			case 3: //this case is going to reset the timer
 				t = this.time;
@@ -182,38 +182,37 @@ public class RedDelay extends OpMode {
 			case 6:  //case 2 is going to display the time
 				left = 0;
 				right = 0;
-			if (timer <= 9) {
-				switch (instep) {
-					case 0:
-						if (armMotor.getCurrentPosition() >= -19079)
-						{
-							armMotor.setPower(-0.7);
-							break;
-					}
-					else {
-							armMotor.setPower(0);
-							instep++;
-							break;
-						}
-					case 1:
-						if (hook.getCurrentPosition() <= 1500)
-						{
-							hook.setPower(0.7);
-							break;
-						}
-						else {
-							hook.setPower(0);
-							instep++;
-							break;
-						}
+				if (timer <= 9) {
+					switch (instep) {
+						case 0:
+							if (hook.getCurrentPosition() <= 2500)
+							{
+								hook.setPower(0.7);
+								break;
+							}
+							else {
+								hook.setPower(0);
+								instep++;
+								break;
+							}case 1:
+							if (armMotor.getCurrentPosition() >= -19079)
+							{
+								armMotor.setPower(-0.7);
+								break;
+							}
+							else {
+								armMotor.setPower(0);
+								instep++;
+								break;
+							}
 
+					}
+					break;
 				}
-				break;
-			}
-			else {
-				step++;
-				break;
-			}
+				else {
+					step++;
+					break;
+				}
 
 			case 7: //reset timer
 				t=this.time;
@@ -292,24 +291,24 @@ public class RedDelay extends OpMode {
 		 * are currently write only.
 		 */
 
-        telemetry.addData("system time ", this.time);
+		telemetry.addData("system time ", this.time);
 		telemetry.addData("right tgt pwr",  "right  pwr: " + String.format("%.2f", right));
 		telemetry.addData("left tgt pwr", "left pwr: " + String.format("%.2f", left));
-		}
+	}
 
 
 	/*
 	 * Code to run when the op mode is first disabled goes here
-	 * 
+	 *
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#stop()
 	 */
 	@Override
 	public void stop() {
 
 	}
-	
+
 	/*
-	 * This method scales the joystick input so for low joystick values, the 
+	 * This method scales the joystick input so for low joystick values, the
 	 * scaled value is less than linear.  This is to make it easier to drive
 	 * the robot more precisely at slower speeds.
 	 */

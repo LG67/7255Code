@@ -146,7 +146,7 @@ public class RedAuton extends OpMode {
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
 				//if (distance > 12) {
 				if (!touch.isPressed())
-				{	right = -0.12;
+				{	right = -0.13;
 					left = -1.0;
 					break;
 				}
@@ -185,6 +185,16 @@ public class RedAuton extends OpMode {
 				if (timer <= 9) {
 					switch (instep) {
 						case 0:
+							if (hook.getCurrentPosition() <= 2500)
+							{
+								hook.setPower(0.7);
+								break;
+							}
+							else {
+								hook.setPower(0);
+								instep++;
+								break;
+							}case 1:
 							if (armMotor.getCurrentPosition() >= -19079)
 							{
 								armMotor.setPower(-0.7);
@@ -192,17 +202,6 @@ public class RedAuton extends OpMode {
 							}
 							else {
 								armMotor.setPower(0);
-								instep++;
-								break;
-							}
-						case 1:
-							if (hook.getCurrentPosition() <= 1500)
-							{
-								hook.setPower(0.7);
-								break;
-							}
-							else {
-								hook.setPower(0);
 								instep++;
 								break;
 							}

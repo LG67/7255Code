@@ -130,8 +130,8 @@ public class BlueDelay extends OpMode {
 					step++;
 					break;
 				}
-			case 1: //****Delay lies here****
-				if (timer<8) {
+			case 1: //****Delay lies here, delay is 7 seconds****
+				if (timer<7) {
 					right =0;
 					left = 0;
 					break;
@@ -185,6 +185,16 @@ public class BlueDelay extends OpMode {
 				if (timer <= 9) {
 					switch (instep) {
 						case 0:
+							if (hook.getCurrentPosition() <= 2500)
+							{
+								hook.setPower(0.7);
+								break;
+							}
+							else {
+								hook.setPower(0);
+								instep++;
+								break;
+							}case 1:
 							if (armMotor.getCurrentPosition() >= -19079)
 							{
 								armMotor.setPower(-0.7);
@@ -192,17 +202,6 @@ public class BlueDelay extends OpMode {
 							}
 							else {
 								armMotor.setPower(0);
-								instep++;
-								break;
-							}
-						case 1:
-							if (hook.getCurrentPosition() <= 1500)
-							{
-								hook.setPower(0.7);
-								break;
-							}
-							else {
-								hook.setPower(0);
 								instep++;
 								break;
 							}

@@ -178,28 +178,44 @@ public class SteamTeleOp extends OpMode {
             armMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
 		//****************************Arm Control*************************
-		if (gamepad2.y) { //package
-            float adelta = -30719 - armMotor.getCurrentPosition();
-            if (Math.abs(adelta)>50){
-                armMotor.setPower(controlOut(.0001,adelta));}	//Call Proportional Control Method
-            else {armMotor.setPower(0);}}				//+/-50 tick deadband
-        else if (gamepad2.b) { //people drop
-            float bdelta = -19079 - armMotor.getCurrentPosition();
-            if (Math.abs(bdelta)>50){
-                armMotor.setPower(controlOut(.0001,bdelta));}
-            else {armMotor.setPower(0);}}
-		else if (gamepad2.x) { //reach
-			float xdelta = -21902 - armMotor.getCurrentPosition();
-			if (Math.abs(xdelta)>50){
-				armMotor.setPower(controlOut(xdelta));}
-			else {armMotor.setPower(0);}}
-		else if (gamepad2.a) { //joust
-			float ydelta = -5219 - armMotor.getCurrentPosition();
-			if (Math.abs(ydelta)>50){
-				armMotor.setPower(controlOut(ydelta));}
-			else {armMotor.setPower(0);}}
-        else
-        {armMotor.setPower(-arm);}	// manual control
+		if (hook.getCurrentPosition() < 2500) {
+			armMotor.setPower(0); }
+		else {
+
+			if (gamepad2.y) { //package
+				float adelta = -30719 - armMotor.getCurrentPosition();
+				if (Math.abs(adelta) > 50) {
+					armMotor.setPower(controlOut(.0001, adelta));
+				}    //Call Proportional Control Method
+				else {
+					armMotor.setPower(0);
+				}
+			}                //+/-50 tick deadband
+			else if (gamepad2.b) { //people drop
+				float bdelta = -19079 - armMotor.getCurrentPosition();
+				if (Math.abs(bdelta) > 50) {
+					armMotor.setPower(controlOut(.0001, bdelta));
+				} else {
+					armMotor.setPower(0);
+				}
+			} else if (gamepad2.x) { //reach
+				float xdelta = -21902 - armMotor.getCurrentPosition();
+				if (Math.abs(xdelta) > 50) {
+					armMotor.setPower(controlOut(xdelta));
+				} else {
+					armMotor.setPower(0);
+				}
+			} else if (gamepad2.a) { //joust
+				float ydelta = -5219 - armMotor.getCurrentPosition();
+				if (Math.abs(ydelta) > 50) {
+					armMotor.setPower(controlOut(ydelta));
+				} else {
+					armMotor.setPower(0);
+				}
+			} else {
+				armMotor.setPower(-arm);
+			}    // manual control
+		}
 
 		//****************************Hook Control*************************
 		if (gamepad1.x) {
@@ -208,7 +224,7 @@ public class SteamTeleOp extends OpMode {
 				hook.setPower(controlOut(xdelta));}	//Call Proportional Control Method
 			else {hook.setPower(0);}}				//+/-10 tick deadband
 		else if (gamepad1.y) {
-			float ydelta = 17734 - hook.getCurrentPosition();  //hook out
+			float ydelta = 17750 - hook.getCurrentPosition();  //hook out
 			if (Math.abs(ydelta)>50){
 				hook.setPower(controlOut(ydelta));}
 			else {hook.setPower(0);}}  // manual control
@@ -222,7 +238,7 @@ public class SteamTeleOp extends OpMode {
 			if (Math.abs(bdelta)>50){
 				hook.setPower(controlOut(bdelta));}
 			else {hook.setPower(0);}}
-		else if (hook.getCurrentPosition()<17734)
+		else if (hook.getCurrentPosition()<17750)
 		{hook.setPower(up);}
 		else hook.setPower(0);
 
@@ -230,8 +246,8 @@ public class SteamTeleOp extends OpMode {
 		if (gamepad2.left_bumper) {
 			float wdelta = 0 - rwheelie.getCurrentPosition();  //left wheeliebar up
 			if (Math.abs(wdelta)>50){
-				lwheelie.setPower(-controlOut(.0017, wdelta));
-				rwheelie.setPower(controlOut(.0017, wdelta));
+				lwheelie.setPower(-controlOut(.003, wdelta));
+				rwheelie.setPower(controlOut(.003, wdelta));
 			}	//Call Proportional Control Method
 			else {lwheelie.setPower(0);
 				rwheelie.setPower(0);
