@@ -50,7 +50,7 @@ public class RedMtnAuton extends OpMode {
 	DcMotor backLeft;
 	DcMotor armMotor;
 	DcMotor hook;
-	DcMotor lwheelie;
+	DcMotor rejector;
 	DcMotor rwheelie;
 	Servo lzip;
 	Servo rzip;
@@ -90,7 +90,7 @@ public class RedMtnAuton extends OpMode {
 		backLeft.setDirection(DcMotor.Direction.REVERSE);
 		armMotor = hardwareMap.dcMotor.get("arm");
 		hook = hardwareMap.dcMotor.get("hook");
-		lwheelie = hardwareMap.dcMotor.get("lwheelie");
+		rejector = hardwareMap.dcMotor.get("rejector");
 		rwheelie = hardwareMap.dcMotor.get("rwheelie");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
@@ -111,8 +111,8 @@ public class RedMtnAuton extends OpMode {
 	@Override
 	public void loop() {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
-		rwheelie.setPower(0.1);
-		lwheelie.setPower(-0.1);
+		rejector.setPower(.5);
+		rwheelie.setPower(0.3);
 		switch (step) {
 			case 0: //reset timer
 				t=this.time;
@@ -157,12 +157,10 @@ public class RedMtnAuton extends OpMode {
 					break;
 				}
 				if (rwheelie.getCurrentPosition()>300){
-					rwheelie.setPower(-.15);
-					lwheelie.setPower(.15);
+					rwheelie.setPower(-.3);
 				}
 				else {
 					rwheelie.setPower(0);
-					lwheelie.setPower(0);
 					step++;
 					break;
 				}

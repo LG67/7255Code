@@ -35,7 +35,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 public class BlueDelay extends OpMode {
 
@@ -51,11 +50,10 @@ public class BlueDelay extends OpMode {
 	DcMotor backLeft;
 	DcMotor armMotor;
 	DcMotor hook;
+	DcMotor rejector;
 	DcMotor lwheelie;
-	DcMotor rwheelie;
 	Servo lzip;
 	Servo rzip;
-	UltrasonicSensor uSonic;
 	TouchSensor touch;
 	double t = 0;  //Takes a snapshot of the time on loop 0
 	double timer = 0;  //Time that we're on the loop
@@ -94,9 +92,8 @@ public class BlueDelay extends OpMode {
 		backLeft.setDirection(DcMotor.Direction.REVERSE);
 		armMotor = hardwareMap.dcMotor.get("arm");
 		hook = hardwareMap.dcMotor.get("hook");
+		rejector = hardwareMap.dcMotor.get("rejector");
 		lwheelie = hardwareMap.dcMotor.get("lwheelie");
-		rwheelie = hardwareMap.dcMotor.get("rwheelie");
-		uSonic = hardwareMap.ultrasonicSensor.get("uSonic");
 		lzip = hardwareMap.servo.get("lzip");
 		rzip = hardwareMap.servo.get("rzip");
 		touch = hardwareMap.touchSensor.get("touch");
@@ -117,20 +114,19 @@ public class BlueDelay extends OpMode {
 	@Override
 	public void loop() {
 		timer = this.time - t; //Timer shows the time that we are in the loop. this.time starts when init starts, subtract off this.time when loop = 0.
+		rejector.setPower(.75);
 		switch (step) {
 			case 0: //put down wheelie bar
-				if (rwheelie.getCurrentPosition() < 380){
-					rwheelie.setPower(0.15);
-					lwheelie.setPower(-0.15);
+				if (lwheelie.getCurrentPosition() > -430){
+					lwheelie.setPower(-0.3);
 					break;
 				}
 				else {
-					rwheelie.setPower(0.30);
-					lwheelie.setPower(-0.30);
+					lwheelie.setPower(-.4);
 					step++;
 					break;
 				}
-			case 1: //****Delay lies here, delay is 7 seconds****
+			case 1: //****Delay lies here**** 7sec
 				if (timer<7) {
 					right =0;
 					left = 0;
@@ -146,7 +142,7 @@ public class BlueDelay extends OpMode {
 				//start from the robot strating point,arch into the beacon repair zone, if the ultrasonic distance is not greater than 8 inches, move on.
 				//if (distance > 12) {
 				if (!touch.isPressed())
-				{	right = -0.12;
+				{	right = -0.2;
 					left = -1.0;
 					break;
 				}
@@ -166,7 +162,7 @@ public class BlueDelay extends OpMode {
 				left = 0;
 				right = 0;
 				armMotor.setPower(0);
-				if (timer< 3) {
+				if (timer< 2.75) {
 					right = -1.0;
 					left = 1.0;
 					break;
@@ -214,7 +210,7 @@ public class BlueDelay extends OpMode {
 					break;
 				}
 
-			case 7: //reset timer
+/*			case 7: //reset timer
 				t=this.time;
 				step++;
 				break;
@@ -256,16 +252,14 @@ public class BlueDelay extends OpMode {
 					left = 1.0;
 					break;
 				}
-				if (rwheelie.getCurrentPosition()>300){
-					rwheelie.setPower(-.15);
-					lwheelie.setPower(.15);
+				if (lwheelie.getCurrentPosition()<-300){
+					lwheelie.setPower(+.3);
 				}
 				else {
-					rwheelie.setPower(0);
 					lwheelie.setPower(0);
 					step++;
 					break;
-				}
+				} */
 			default:
 				frontRight.setPower(0);
 				frontLeft.setPower(0);
