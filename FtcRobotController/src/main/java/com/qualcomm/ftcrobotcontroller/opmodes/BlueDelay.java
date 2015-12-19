@@ -127,7 +127,7 @@ public class BlueDelay extends OpMode {
 					break;
 				}
 			case 1: //****Delay lies here**** 7sec
-				if (timer<7) {
+				if (timer<10) {
 					right =0;
 					left = 0;
 					break;

@@ -70,7 +70,7 @@ public class SteamTeleOp extends OpMode {
 	double distance;
 	float up;
 	float arm;
-	int push=0;
+	int push=1;
 	int wbspeed;
 	int countloop;
 
@@ -279,9 +279,10 @@ public class SteamTeleOp extends OpMode {
 		if (countloop%25==0) {
 			if (gamepad2.dpad_down) {
 				push++;
-				wbspeed = push % 2;
+
 			}
 		}
+		wbspeed = push % 2;
 		rejector.setPower(wbspeed*0.75);
 
 		countloop++;
